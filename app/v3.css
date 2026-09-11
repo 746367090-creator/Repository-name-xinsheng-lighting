@@ -34,3 +34,6 @@
   .home-hero .lead{max-width:720px;text-align:left}
   .home-hero .hero-actions{justify-content:flex-start}
 }
+
+/* XINSHENG UPDATE 2026-09 v5: show homepage banners without overlay filter */
+.home-hero .hero-shade{display:none!important}
