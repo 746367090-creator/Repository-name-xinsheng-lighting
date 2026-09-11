@@ -37,3 +37,6 @@
 
 /* XINSHENG UPDATE 2026-09 v5: show homepage banners without overlay filter */
 .home-hero .hero-shade{display:none!important}
+
+/* XINSHENG UPDATE 2026-09 v6: align homepage description with heading */
+@media(min-width:981px){.home-hero .lead{margin-left:0!important;margin-right:0!important;text-align:left}}
