@@ -1,3 +1,4 @@
+import PageMediaUploader from "@/components/admin/PageMediaUploader";
 import type { SitePage } from "@/lib/types";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 
@@ -103,7 +104,7 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
         </div>
       </div>)}</div>
     </div> : null}
-    <label>Upload Page Images / Videos<input type="file" name="media" accept="image/*,video/*" multiple/></label>
+    <PageMediaUploader currentCount={page.media?.length || 0}/>
     <label className="check"><input type="checkbox" name="published" defaultChecked={page.published}/> Published</label>
     <button className="btn-primary">Save {page.title}</button>
   </form>;
