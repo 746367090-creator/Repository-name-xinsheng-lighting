@@ -20,3 +20,9 @@
 .media-manager-status{margin:10px 0;color:#8b430f;font-weight:700}
 .media-manager-error,.media-slot-error{margin:8px 0;color:#b3261e;font-weight:700}
 .media-slot-error{font-size:12px;overflow-wrap:anywhere}
+
+/* Product order controls */
+.product-order-form{display:flex;align-items:center;gap:7px}
+.product-order-form input{width:66px;border:1px solid #ded3c6;border-radius:7px;padding:8px}
+.product-order-form button{border:0;border-radius:7px;background:#ed7117;color:#fff;padding:8px 10px;cursor:pointer;font-weight:700}
+.product-order-form button:hover{background:#c95b0d}
