@@ -26,3 +26,4 @@
 .product-order-form input{width:66px;border:1px solid #ded3c6;border-radius:7px;padding:8px}
 .product-order-form button{border:0;border-radius:7px;background:#ed7117;color:#fff;padding:8px 10px;cursor:pointer;font-weight:700}
 .product-order-form button:hover{background:#c95b0d}
+.inquiry-status-form{display:flex;align-items:center;gap:8px}.inquiry-status-form select{min-width:125px}.inquiry-status-form button{border:0;background:none;color:#ed7117;font-weight:800;cursor:pointer}.inquiry-spam td{background:#fff4f2;color:#786d65}.inquiry-spam td:not(:last-child){opacity:.72}.spam-badge{display:inline-block;margin-top:7px;padding:4px 8px;border-radius:999px;background:#b3261e;color:#fff;font-size:11px;font-weight:800}
