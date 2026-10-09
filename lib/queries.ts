@@ -45,3 +45,9 @@ export async function getGallery(collection?:GalleryItem["collection"]){ const s
 export async function getContentEntries(type?:ContentEntry["type"],includeDrafts=false){const s=createClient();if(!s)return[];let q=s.from("content_entries").select("*").order("published_at",{ascending:false});if(type)q=q.eq("type",type);if(!includeDrafts)q=q.eq("status","published");const{data}=await q;return(data as ContentEntry[])||[]}
 export async function getContentEntry(slug:string){const s=createClient();if(!s)return null;const{data}=await s.from("content_entries").select("*").eq("slug",slug).eq("status","published").maybeSingle();return data as ContentEntry|null}
 export async function getSetting(key:string){const s=createClient();if(!s)return null;const{data}=await s.from("site_settings").select("*").eq("key",key).maybeSingle();return data as SiteSetting|null}
+
+export async function getHomepageProducts(){
+ const s=createClient();if(!s)return [];
+ const {data,error}=await s.from("products").select("*").eq("status","published").eq("featured",true).order("sort_order").order("created_at",{ascending:false}).limit(6);
+ return error?[]:(data||[]) as Product[];
+}

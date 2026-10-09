@@ -35,3 +35,4 @@
 .about-media-buttons{display:flex;gap:6px;flex-wrap:wrap;padding:12px 0 0!important}.about-media-buttons button{border:1px solid #ded3c6;border-radius:6px;background:#fff;padding:7px;cursor:pointer}.about-media-buttons button:disabled{opacity:.45;cursor:default}.admin-media label input{width:100%}
 @media(max-width:900px){.admin-sidebar{height:auto;position:relative}.admin-sidebar nav{display:flex;flex-direction:column}.admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-actions{gap:16px;flex-wrap:wrap}}
 @media(max-width:540px){.admin-shortcuts,.admin-media-grid{grid-template-columns:1fr}.admin-content{padding:20px 15px}}
+.homepage-product-toggle{min-height:40px;border:1px solid #ded3c6;background:#fff;border-radius:7px;padding:8px 12px;cursor:pointer;white-space:nowrap}.homepage-product-toggle[aria-pressed=true]{background:#fff3e8;border-color:#ed7117;color:#b9520b}.homepage-product-toggle:disabled{opacity:.6;cursor:wait}

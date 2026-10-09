@@ -7,8 +7,7 @@ export default function HomePageFields({content}:{content:Record<string,unknown>
     <h3>Homepage sections / 首页板块</h3>
     <p className="hint">客户名称、品牌Logo、证书、专利和数据须有真实依据与公开授权。没有授权的客户Logo不会自动出现在首页。</p>
     {headings.map(([key,label])=><div key={key}><h4>{label}</h4><div className="admin-form-grid"><label>Heading / 标题<input name={`home_${key}_title`} defaultValue={text(`home_${key}_title`)}/></label><label>Description / 介绍<textarea name={`home_${key}_body`} defaultValue={text(`home_${key}_body`)}/></label></div></div>)}
-    <label>Core series / 核心产品分类（每行一个，按显示顺序）<textarea name="home_product_categories" defaultValue={String(content.home_product_categories||"")}/></label>
-    <p className="hint">填写 Products 中已有分类的完整名称，建议4–6个，最多6个。留空读取前6个有产品的分类；不足4个只展示可用系列。图片读取分类产品主图，在 Products 修改。</p>
+    <p className="hint">首页产品在 产品管理 → 产品 / Products 中勾选“首页展示”。只展示已发布产品，最多6个，按产品排序排列。图片、名称和详情同步读取产品内容。</p>
     <h3>Capability evidence / 制造能力依据</h3>
     <p className="hint">上方 Why Partner 卡片写具体能力。下方链接真实工序、设备资料或适用检测记录，说明证书对应产品及范围。</p>
     {[1,2,3,4].map(i=><div className="admin-form-grid" key={i}><label>Card {i} evidence URL / 依据链接<input name={`why_evidence_${i}`} defaultValue={String(content[`why_evidence_${i}`]||"")} placeholder="/factory or https://…"/></label><label>Evidence label / 说明<input name={`why_evidence_label_${i}`} defaultValue={String(content[`why_evidence_label_${i}`]||"View supporting information")}/></label></div>)}

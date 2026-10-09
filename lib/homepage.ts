@@ -23,7 +23,7 @@ export const homeFAQs: QA[] = [
   {question:"How can I discuss a project with your team?",answer:"Submit the inquiry form with your requirements and preferred discussion time, including your time zone."},
 ];
 export const homeTextDefaults: Record<string,string> = {
-  home_products_title:"Explore our lighting range", home_products_body:"Choose a product series to view the range and discuss your requirements.",
+  home_products_title:"Explore our lighting range", home_products_body:"Explore selected lighting products and discuss the requirements for your next order.",
   home_process_title:"From your brief to delivery", home_process_body:"Start with your requirements. Confirm the sample and order details before production.",
   home_factory_title:"Factory & quality control", home_factory_body:"Explore manufacturing photos, equipment and inspection information. Ask our team for the records relevant to your product.",
   home_cases_title:"Product development cases", home_cases_body:"Explore project requirements, development decisions and the resulting products.",

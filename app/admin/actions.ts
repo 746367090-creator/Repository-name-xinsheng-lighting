@@ -85,3 +85,9 @@ export async function saveAboutPage(_:AboutActionState,form:FormData):Promise<Ab
  }catch(error){return{error:error instanceof Error?error.message:"Unable to save About Us. Please try again."}}
  revalidatePath("/about");revalidatePath("/admin/about");revalidatePath("/admin/content");redirect("/admin/about");
 }
+
+export async function updateHomepageProduct(id:string,form:FormData){
+ const s=requiredClient();const {data,error:authError}=await s.auth.getUser();if(authError||!data.user)throw new Error("Please sign in before editing.");
+ const {error}=await s.from("products").update({featured:form.get("featured")==="on"}).eq("id",id);if(error)throw error;
+ revalidatePath("/");revalidatePath("/admin/products");revalidatePath(`/admin/products/${id}`);
+}
