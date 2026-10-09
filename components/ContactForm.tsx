@@ -1,1 +1,38 @@
-"use client";import{useSearchParams}from"next/navigation";import{useState}from"react";export default function ContactForm(){const params=useSearchParams(),[status,setStatus]=useState("");async function submit(e:React.FormEvent<HTMLFormElement>){e.preventDefault();setStatus("Sending…");const form=new FormData(e.currentTarget),r=await fetch("/api/inquiries",{method:"POST",body:form}),j=await r.json();setStatus(j.message);if(r.ok)e.currentTarget.reset()}return <form className="card form-card" onSubmit={submit}><div className="form-grid"><input className="field" name="full_name" placeholder="Full Name *" required/><input className="field" name="company_name" placeholder="Company Name *" required/><input className="field" name="email" type="email" placeholder="Email Address *" required/><input className="field" name="phone" placeholder="Phone / WhatsApp"/><input className="field" name="country" placeholder="Country / Region"/><input className="field" name="product" defaultValue={params.get("product")||""} placeholder="Product / Model"/><input className="field" name="quantity" placeholder="Quantity / Annual Volume"/><input className="field" name="application" placeholder="Application"/><select className="field full" name="inquiry_type" defaultValue=""><option value="" disabled>Inquiry Type</option><option>Product Purchase</option><option>OEM / ODM Request</option><option>Sample Request</option><option>Technical Support</option></select><input type="hidden" name="annual_volume" value=""/><textarea className="field full" name="message" placeholder="Requirements, target market, specifications and timeline…" required/><button className="btn-primary full">Send Inquiry — We Reply Within 24h</button><p className="form-status full">{status||"Your information is used only to respond to your inquiry."}</p></div></form>}
+"use client";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+const inquiryTypes = ["Product Purchase", "OEM / ODM Request", "Sample Request", "Technical Support"];
+export default function ContactForm() {
+  const params = useSearchParams();
+  const [status, setStatus] = useState("");
+  const [sending, setSending] = useState(false);
+  const requestedType = params.get("type") || "";
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (sending) return;
+    const formElement = event.currentTarget;
+    setSending(true); setStatus("Sending your inquiry…");
+    try {
+      const response = await fetch("/api/inquiries", { method: "POST", body: new FormData(formElement) });
+      const result = await response.json();
+      setStatus(typeof result.message === "string" ? result.message : "Unable to send. Please try again or email sales@szxinshengtech.com.");
+      if (response.ok) formElement.reset();
+    } catch { setStatus("Connection interrupted. Please try again or email sales@szxinshengtech.com."); }
+    finally { setSending(false); }
+  }
+  return <form className="card form-card" onSubmit={submit} aria-busy={sending}><h2>Tell us about your project</h2><div className="form-grid">
+    <label className="architecture-form-label">Full name *<input className="field" name="full_name" autoComplete="name" required/></label>
+    <label className="architecture-form-label">Company<input className="field" name="company_name" autoComplete="organization"/></label>
+    <label className="architecture-form-label">Email *<input className="field" name="email" type="email" autoComplete="email" required/></label>
+    <label className="architecture-form-label">Phone / WhatsApp<input className="field" name="phone" type="tel" autoComplete="tel"/></label>
+    <label className="architecture-form-label">Country / region<input className="field" name="country" autoComplete="country-name"/></label>
+    <label className="architecture-form-label">Product / model<input className="field" name="product" defaultValue={params.get("product") || ""}/></label>
+    <label className="architecture-form-label">Expected quantity<input className="field" name="quantity" placeholder="e.g. 500 pieces"/></label>
+    <label className="architecture-form-label">Application<input className="field" name="application" placeholder="e.g. retail gifting"/></label>
+    <label className="architecture-form-label full">Inquiry type<select className="field" name="inquiry_type" defaultValue={inquiryTypes.includes(requestedType) ? requestedType : "Product Purchase"}>{inquiryTypes.map(type => <option key={type}>{type}</option>)}</select></label>
+    <input type="hidden" name="annual_volume" value=""/>
+    <label className="architecture-form-label full">Project requirements *<textarea className="field" name="message" placeholder="Target market, required functions, customization, quantity and timeline…" required/></label>
+    <button className="btn-primary full" type="submit" disabled={sending}>{sending ? "Sending…" : "Send Your Inquiry"}</button>
+    <p className="form-status full" role="status" aria-live="polite">{status || "Your information is used to respond to your inquiry. For drawings or project files, email sales@szxinshengtech.com."}</p>
+  </div></form>;
+}

@@ -1,73 +1,39 @@
 import Link from "next/link";
 import { Cog, Factory, Globe2, ShieldCheck } from "lucide-react";
-import { getGallery, getNews, getPage } from "@/lib/queries";
+import { getGallery, getNews, getPage, getProducts, getCategories } from "@/lib/queries";
 import SectionHead from "@/components/SectionHead";
 import GalleryCarousel from "@/components/GalleryCarousel";
 import HeroCarousel from "@/components/HeroCarousel";
-
+import ProductCard from "@/components/ProductCard";
+import ProjectCTA from "@/components/ProjectCTA";
 export const revalidate = 60;
-
-const featureDefaults = [
-  [Cog, "Product Development", "Design support, samples and production engineering around your brief."],
-  [Factory, "Factory Direct", "An integrated team for manufacturing, inspection and dependable delivery."],
-  [Globe2, "Global Service", "Export documentation, logistics and Amazon FBA preparation for key markets."],
-  [ShieldCheck, "Quality Assurance", "Defined incoming, in-process and finished-product quality checkpoints."],
+const defaults = [
+  [Cog, "Product Development", "From your product brief to samples and production engineering."],
+  [Factory, "Manufacturing", "Production, assembly and packing coordinated around your order."],
+  [ShieldCheck, "Quality Control", "Material, in-process and finished-product inspection checkpoints."],
+  [Globe2, "Export Support", "Packaging and shipment preparation for your target market."],
 ] as const;
-
 export default async function Home() {
-  const [page, news, customers, logos, hero, catalog] = await Promise.all([
-    getPage("home"), getNews(3), getGallery("customer"), getGallery("logo"), getGallery("hero"), getGallery("catalog")
-  ]);
+  const [page, news, customers, logos, hero, catalog, products, categories] = await Promise.all([getPage("home"), getNews(3), getGallery("customer"), getGallery("logo"), getGallery("hero"), getGallery("catalog"), getProducts(), getCategories()]);
   const content = page?.content || {};
-  const features = featureDefaults.map(([Icon, title, body], index) => ({
-    Icon,
-    title: String(content[`why_card_title_${index + 1}`] || title),
-    body: String(content[`why_card_body_${index + 1}`] || body),
-  }));
-
+  const heading = page?.heading === "Illuminate the Future with Intelligent Light" ? "Lighting Products Built for Your Brand" : page?.heading;
+  const eyebrow = page?.eyebrow === "Smart Lighting Solutions Since 2011" ? "Your Lighting Manufacturing Partner" : page?.eyebrow;
+  const featured = [...products.filter(p => p.featured), ...products.filter(p => !p.featured)].slice(0, 6);
+  const categoryNames = Array.from(new Set([...categories.map(c => c.name), ...products.map(p => p.category)])).filter(name => products.some(p => p.category === name));
+  const stats = [1,2,3,4].filter(i => content[`stat_value_${i}`] && content[`stat_label_${i}`]);
+  const catalogUrl = catalog[0]?.media_url || String(content.catalog_url || "");
   return <>
-    <div className="trust-bar"><div className="container trust-items"><span>14+ Years Experience</span><span>ISO 9001 Certified</span><span>Global B2B Service</span><span>24h Response Time</span><span>OEM / ODM Available</span></div></div>
-    <HeroCarousel items={hero} eyebrow={page?.eyebrow} heading={page?.heading} body={page?.body} ctaLabel={String(content.cta_label || "Request a Quote")} ctaUrl={String(content.cta_url || "/contact")} catalogLabel={String(content.catalog_label || "Download Catalog")} catalogUrl={catalog[0]?.media_url || String(content.catalog_url || "/contact")}/>
-
-    <section className="home-stats"><div className="container stats">{[
-      ["stat_value_1", "14+", "stat_label_1", "Years Experience"],
-      ["stat_value_2", "3,000", "stat_label_2", "Units / Day"],
-      ["stat_value_3", "3,000m²", "stat_label_3", "Factory Area"],
-      ["stat_value_4", "20+", "stat_label_4", "Markets Served"],
-    ].map(([valueKey, valueDefault, labelKey, labelDefault]) => <div className="stat" key={valueKey}><strong>{String(content[valueKey] || valueDefault)}</strong><span>{String(content[labelKey] || labelDefault)}</span></div>)}</div></section>
-
-    <div className="section-divider"/>
-    <section className="section customer-section"><div className="container">
-      <SectionHead kicker="Partnerships" title="Customer" accent="Visits" description="Photos with customers and partners from projects, exhibitions and factory visits."/>
-      <GalleryCarousel items={customers}/>
-      <div className="logo-space"/>
-      <SectionHead
-        kicker={String(content.partner_kicker || "Trusted by")}
-        title={String(content.partner_title || "Partner")}
-        accent={String(content.partner_accent || "Brands")}
-        description={String(content.partner_description || "Selected customer and partner logos.")}
-      />
-      <GalleryCarousel items={logos} logos/>
+    <div className="trust-bar"><div className="container trust-items"><span>Product Development</span><span>OEM / ODM Customization</span><span>Manufacturing & Quality Control</span><span>Global B2B Service</span></div></div>
+    <HeroCarousel items={hero} eyebrow={eyebrow || "Your Lighting Manufacturing Partner"} heading={heading || "Lighting Products Built for Your Brand"} body={page?.body || "Product development, manufacturing and customization for global brands, importers and retailers."} ctaLabel={String(content.cta_label || "Get a Quote")} ctaUrl={String(content.cta_url || "/contact")} catalogLabel="Explore Products" catalogUrl="/products"/>
+    <section className="section"><div className="container"><div className="architecture-heading"><div><div className="kicker">Find your product</div><h2>Explore our <span className="accent">lighting range.</span></h2></div><Link href="/products" className="text-link">View all products →</Link></div>
+      <div className="category-grid">{categoryNames.map(name => { const product = products.find(p => p.category === name && p.media?.some(m => m.type === "image")); const image = product?.media?.find(m => m.type === "image"); return <Link href={`/products?category=${encodeURIComponent(name)}`} className="category-tile" key={name}>{image && <img src={image.url} alt={name} loading="lazy"/>}<div><h3>{name}</h3><span>Explore collection →</span></div></Link>; })}</div>
     </div></section>
-
-    <div className="section-divider"/>
-    <section className="section"><div className="container">
-      <SectionHead
-        title={String(content.why_title || "Why Partner")}
-        accent={String(content.why_accent || "With Us")}
-        description={String(content.why_description || "From prototype to mass production, we deliver reliable support at every stage")}
-      />
-      <div className="feature-grid">{features.map(({ Icon, title, body }) => <article className="card feature-card" key={title}>
-        <div className="feature-icon"><Icon/></div><h3>{title}</h3><p>{body}</p>
-      </article>)}</div>
-    </div></section>
-
-    <div className="section-divider"/>
-    <section className="section"><div className="container">
-      <Link href="/news" className="section-head-link" aria-label="View all news"><SectionHead title="Latest" accent="News" description="Company updates, product knowledge and industry insights"/></Link>
-      <div className="news-grid">{news.map(n => <Link href={`/news/${n.slug}`} className="card" key={n.id}><div className="news-cover">{n.cover_url ? <img src={n.cover_url} alt={n.title}/> : <span className="accent news-star">✦</span>}<span className="news-date">{new Date(n.published_at).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</span></div><div className="news-info"><small>{n.category}</small><h3>{n.title}</h3><p>{n.excerpt}</p></div></Link>)}</div>
-    </div></section>
-
-    <section className="section contact-band"><div className="container section-head"><div className="kicker">Have a new project?</div><h2>Let’s build your next <span className="accent">lighting product.</span></h2><p>Send your target market, requirements and expected quantity. Our team will respond within 24 hours.</p><div className="hero-actions"><Link href="/contact" className="btn-primary">Start Your Project</Link></div></div></section>
+    {featured.length > 0 && <section className="section architecture-soft"><div className="container"><SectionHead kicker="Selected from our range" title="Products for your" accent="next collection" description="Explore product details, specifications and customization options. Ask our team about samples and pricing."/><div className="product-grid">{featured.map(product => <ProductCard product={product} key={product.id}/>)}</div></div></section>}
+    <section className="section"><div className="container"><SectionHead kicker="From concept to shipment" title={String(content.why_title || "A partner at") } accent={String(content.why_accent || "every stage")} description={String(content.why_description || "Bring product development, manufacturing and quality control into one coordinated workflow.")}/><div className="feature-grid">{defaults.map(([Icon, title, body], index) => <article className="card feature-card" key={title}><div className="feature-icon"><Icon aria-hidden="true"/></div><h3>{String(content[`why_card_title_${index+1}`] || title)}</h3><p>{String(content[`why_card_body_${index+1}`] || body)}</p></article>)}</div>{stats.length > 0 && <div className="stats">{stats.map(i => <div className="stat" key={i}><strong>{String(content[`stat_value_${i}`])}</strong><span>{String(content[`stat_label_${i}`])}</span></div>)}</div>}<div className="hero-actions"><Link href="/factory" className="btn-secondary">Inside Our Factory</Link><Link href="/about" className="text-link">Meet XINSHERN →</Link></div></div></section>
+    <section className="section architecture-dark"><div className="container"><div className="architecture-heading"><div><div className="kicker">OEM / ODM</div><h2>Make it <span className="accent">your own.</span></h2><p>Discuss product functions, finishes, branding and retail packaging with our team.</p></div><Link href="/oem-odm" className="btn-primary">Explore Customization</Link></div><ol className="process-grid">{[["Share your brief","Market, product, quantity and timeline."],["Review the proposal","Feasibility, scope and sample requirements."],["Approve your sample","Confirm specifications, finish and packaging."],["Move to production","Agree the quality plan and delivery schedule."]].map(([title, body], i) => <li key={title}><span>0{i+1}</span><h3>{title}</h3><p>{body}</p></li>)}</ol></div></section>
+    <section className="section"><div className="container"><SectionHead kicker="Lighting in context" title="Find the right" accent="application" description="Explore lighting scenes and application-led guidance for your next product range."/><div className="buyer-paths">{[["Home & Ambient","Decorative lighting for everyday spaces."],["Seasonal & Gift","Products for seasonal ranges and gifting."],["Outdoor & Events","Lighting ideas for gardens, parties and events."]].map(([title, body]) => <Link href="/applications" className="card" key={title}><h3>{title}</h3><p>{body}</p><span className="text-link">Explore applications →</span></Link>)}</div></div></section>
+    {(customers.length > 0 || logos.length > 0) && <section className="section architecture-soft"><div className="container">{customers.length > 0 && <><SectionHead kicker="Meetings & factory visits" title="Working" accent="together" description="Photos from customer visits, exhibitions and project discussions."/><GalleryCarousel items={customers}/></>}{logos.length > 0 && <><div className="logo-space"/><SectionHead kicker={String(content.partner_kicker || "Connections")} title={String(content.partner_title || "Partner")} accent={String(content.partner_accent || "Brands")} description={String(content.partner_description || "Customer and partner logos.")}/><GalleryCarousel items={logos} logos/></>}</div></section>}
+    <section className="section"><div className="container"><div className="architecture-heading"><div><div className="kicker">Buyer resources</div><h2>Prepare your <span className="accent">next order.</span></h2></div><Link href="/resources" className="text-link">Catalog, guides & FAQ →</Link></div>{catalogUrl && <a href={catalogUrl} className="btn-secondary" target="_blank" rel="noreferrer">Download Product Catalog ↗</a>}<div className="news-grid">{news.map(n => <Link href={`/news/${n.slug}`} className="card" key={n.id}>{n.cover_url && <div className="news-cover"><img src={n.cover_url} alt={n.title} loading="lazy"/></div>}<div className="news-info"><small>{n.category}</small><h3>{n.title}</h3><p>{n.excerpt}</p></div></Link>)}</div></div></section>
+    <ProjectCTA/>
   </>;
 }

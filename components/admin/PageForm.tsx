@@ -30,9 +30,9 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
       </div>
 
       <h3>Homepage Statistics</h3>
-      <p className="hint">Edit both the number and the label shown below it.</p>
+      <p className="hint">Use verified figures only. Leave a value empty to hide it; keep factory area consistent with the Factory page.</p>
       {[ ["14+", "Years Experience"], ["3,000", "Units / Day"], ["3,000m²", "Factory Area"], ["20+", "Markets Served"] ].map(([value, label], i) => <div className="admin-form-grid" key={i}>
-        <label>Statistic {i + 1} Value<input name={`stat_value_${i + 1}`} defaultValue={String(content[`stat_value_${i + 1}`] || value)}/></label>
+        <label>Statistic {i + 1} Value<input name={`stat_value_${i + 1}`} defaultValue={String(content[`stat_value_${i + 1}`] || "")}/></label>
         <label>Statistic {i + 1} Label<input name={`stat_label_${i + 1}`} defaultValue={String(content[`stat_label_${i + 1}`] || label)}/></label>
       </div>)}
 
@@ -56,8 +56,8 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
       </div>)}
     </>}
 
-    {page.slug === "factory" && <>
-      <h3>Factory Sections</h3>
+    {(page.slug === "factory" || page.slug === "oem-odm") && <>
+      <h3>{page.slug === "oem-odm" ? "Customization Sections" : "Factory Sections"}</h3>
       {[1, 2, 3, 4, 5].map((n, i) => <div className="admin-form-grid" key={n}>
         <label>Section {n} Title<input name={`section_title_${n}`} defaultValue={sections[i]?.title}/></label>
         <RichTextEditor name={`section_body_${n}`} label={`Section ${n} Description`} defaultValue={String(sections[i]?.body || "")}/>
