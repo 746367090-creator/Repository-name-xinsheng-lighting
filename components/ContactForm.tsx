@@ -2,7 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 const inquiryTypes = ["Product Purchase", "OEM / ODM Request", "Sample Request", "Technical Support"];
-export default function ContactForm({defaultInquiryType="Product Purchase"}:{defaultInquiryType?:string}) {
+export default function ContactForm({defaultInquiryType="Product Purchase",heading="Tell us about your project"}:{defaultInquiryType?:string;heading?:string}) {
   const params = useSearchParams();
   const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
@@ -20,7 +20,7 @@ export default function ContactForm({defaultInquiryType="Product Purchase"}:{def
     } catch { setStatus("Connection interrupted. Please try again or email sales@szxinshengtech.com."); }
     finally { setSending(false); }
   }
-  return <form className="card form-card" onSubmit={submit} aria-busy={sending}><h2>Tell us about your project</h2><div className="form-grid">
+  return <form className="card form-card" onSubmit={submit} aria-busy={sending}><h2>{heading}</h2><div className="form-grid">
     <label className="architecture-form-label">Full name *<input className="field" name="full_name" autoComplete="name" required/></label>
     <label className="architecture-form-label">Company<input className="field" name="company_name" autoComplete="organization"/></label>
     <label className="architecture-form-label">Email *<input className="field" name="email" type="email" autoComplete="email" required/></label>

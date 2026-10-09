@@ -1,12 +1,13 @@
+import HomePageFields from "@/components/admin/HomePageFields";
 import PageMediaUploader from "@/components/admin/PageMediaUploader";
 import type { SitePage } from "@/lib/types";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 
 const whyDefaults = [
-  ["Product Development", "Design support, samples and production engineering around your brief."],
-  ["Factory Direct", "An integrated team for manufacturing, inspection and dependable delivery."],
-  ["Global Service", "Export documentation, logistics and Amazon FBA preparation for key markets."],
-  ["Quality Assurance", "Defined incoming, in-process and finished-product quality checkpoints."],
+  ["Product development", "Discuss the design brief, sample requirements and specifications for your product."],
+  ["Manufacturing process", "Review the equipment and production steps relevant to your order."],
+  ["Inspection requirements", "Agree inspection checkpoints and request the applicable test records."],
+  ["Packaging & delivery", "Confirm packaging, labeling and shipment requirements for your market."],
 ];
 
 export default function PageForm({ page, action }: { page: SitePage; action: (form: FormData) => void }) {
@@ -23,37 +24,30 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
     {page.slug === "home" && <>
       <h3>Homepage Buttons</h3>
       <div className="admin-form-grid">
-        <label>Inquiry Button Label<input name="cta_label" defaultValue={String(content.cta_label || "Request a Quote")}/></label>
-        <label>Inquiry Button Link<input name="cta_url" defaultValue={String(content.cta_url || "/contact")}/></label>
+        <label>Inquiry Button Label<input name="cta_label" defaultValue={String(content.cta_label || "Submit Project Requirements")}/></label>
+        <label>Inquiry Button Link<input name="cta_url" defaultValue={String(content.cta_url || "/#project-inquiry")}/></label>
         <label>Catalog Button Label<input name="catalog_label" defaultValue={String(content.catalog_label || "Download Catalog")}/></label>
         <label>Catalog PDF URL<input name="catalog_url" defaultValue={String(content.catalog_url || "")}/></label>
       </div>
 
-      <h3>Homepage Statistics</h3>
+      <h3>Verified Statistics / 经核实数据</h3>
       <p className="hint">Use verified figures only. Leave a value empty to hide it; keep factory area consistent with the Factory page.</p>
       {[ ["14+", "Years Experience"], ["3,000", "Units / Day"], ["3,000m²", "Factory Area"], ["20+", "Markets Served"] ].map(([value, label], i) => <div className="admin-form-grid" key={i}>
         <label>Statistic {i + 1} Value<input name={`stat_value_${i + 1}`} defaultValue={String(content[`stat_value_${i + 1}`] || "")}/></label>
         <label>Statistic {i + 1} Label<input name={`stat_label_${i + 1}`} defaultValue={String(content[`stat_label_${i + 1}`] || label)}/></label>
       </div>)}
 
-      <h3>Partner Brands Section</h3>
-      <div className="admin-form-grid">
-        <label>Small Heading<input name="partner_kicker" defaultValue={String(content.partner_kicker || "Trusted by")}/></label>
-        <label>Black Title<input name="partner_title" defaultValue={String(content.partner_title || "Partner")}/></label>
-        <label>Orange Title<input name="partner_accent" defaultValue={String(content.partner_accent || "Brands")}/></label>
-        <label>Description<input name="partner_description" defaultValue={String(content.partner_description || "Selected customer and partner logos.")}/></label>
-      </div>
-
       <h3>Why Partner With Us Section</h3>
       <div className="admin-form-grid">
-        <label>Black Title<input name="why_title" defaultValue={String(content.why_title || "Why Partner")}/></label>
-        <label>Orange Title<input name="why_accent" defaultValue={String(content.why_accent || "With Us")}/></label>
+        <label>Black Title<input name="why_title" defaultValue={String(content.why_title || "Review the capabilities")}/></label>
+        <label>Orange Title<input name="why_accent" defaultValue={String(content.why_accent || "behind your product")}/></label>
       </div>
-      <label>Section Description<input name="why_description" defaultValue={String(content.why_description || "From prototype to mass production, we deliver reliable support at every stage")}/></label>
+      <label>Section Description<input name="why_description" defaultValue={String(content.why_description || "Discuss the manufacturing process and supporting evidence relevant to your project.")}/></label>
       {whyDefaults.map(([title, body], i) => <div className="admin-form-grid" key={title}>
         <label>Card {i + 1} Title<input name={`why_card_title_${i + 1}`} defaultValue={String(content[`why_card_title_${i + 1}`] || title)}/></label>
         <label>Card {i + 1} Description<textarea name={`why_card_body_${i + 1}`} defaultValue={String(content[`why_card_body_${i + 1}`] || body)}/></label>
       </div>)}
+      <HomePageFields content={content}/>
     </>}
 
     {page.slug === "factory" && <>
