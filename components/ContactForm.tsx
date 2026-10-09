@@ -28,7 +28,7 @@ export default function ContactForm({defaultInquiryType="Product Purchase"}:{def
     <label className="architecture-form-label">Country / region<input className="field" name="country" autoComplete="country-name"/></label>
     <label className="architecture-form-label">Product / model<input className="field" name="product" defaultValue={params.get("product") || ""}/></label>
     <label className="architecture-form-label">Expected quantity<input className="field" name="quantity" placeholder="e.g. 500 pieces"/></label>
-    <label className="architecture-form-label">Application<input className="field" name="application" placeholder="e.g. retail gifting"/></label>
+    <label className="architecture-form-label">Application<input className="field" name="application" defaultValue={params.get("application") || ""} placeholder="e.g. retail gifting"/></label>
     <label className="architecture-form-label full">Inquiry type<select className="field" name="inquiry_type" defaultValue={inquiryTypes.includes(requestedType) ? requestedType : (inquiryTypes.includes(defaultInquiryType) ? defaultInquiryType : "Product Purchase")}>{inquiryTypes.map(type => <option key={type}>{type}</option>)}</select></label>
     <input type="hidden" name="annual_volume" value=""/>
     <label className="architecture-form-label full">Project requirements *<textarea className="field" name="message" placeholder="Target market, required functions, customization, quantity and timeline…" required/></label>

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-export default function GuideCoverEditor({ existing = "", onBusy }: {existing?:string;onBusy:(busy:boolean)=>void}) {
+export default function GuideCoverEditor({ existing = "", existingType = "image", onBusy }: {existing?:string;existingType?:"image"|"video";onBusy:(busy:boolean)=>void}) {
   const [cover, setCover] = useState(existing);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -20,5 +20,5 @@ export default function GuideCoverEditor({ existing = "", onBusy }: {existing?:s
     } catch(error) {setMessage(error instanceof Error ? error.message : "图片上传失败，请重试 / Upload failed. Try again.");}
     finally {setBusy(false);onBusy(false);}
   }
-  return <div><h3>Cover Image / 封面图片</h3><input type="hidden" name="existing_cover" value={existing}/><input type="hidden" name="uploaded_cover_url" value={cover !== existing ? cover : ""}/><input type="hidden" name="remove_cover" value={cover ? "" : "on"}/>{cover && <div style={{maxWidth:600,marginBottom:16}}><img src={cover} alt="Guide cover preview" style={{width:"100%",aspectRatio:"16/9",objectFit:"cover",borderRadius:12}}/><button type="button" className="danger" disabled={busy} onClick={() => {setCover("");setMessage("保存后移除封面 / Save to remove the cover.");}}>Remove cover / 移除封面</button></div>}<label>Upload / Replace 上传或更换<input type="file" accept="image/*" disabled={busy} onChange={event => {void upload(event.target.files?.[0]);event.target.value="";}}/></label><p role="status" aria-live="polite" className="hint">{message || "封面用于资源列表和文章详情页 / Shown on the guide card and detail page."}</p></div>;
+  return <div><h3>Cover Image / 封面图片</h3><input type="hidden" name="existing_cover" value={existing}/><input type="hidden" name="uploaded_cover_url" value={cover !== existing ? cover : ""}/><input type="hidden" name="remove_cover" value={cover ? "" : "on"}/>{cover && <div style={{maxWidth:600,marginBottom:16}}>{cover===existing && existingType==="video" ? <video src={cover} controls style={{width:"100%"}}/> : <img src={cover} alt="Cover preview" style={{width:"100%",aspectRatio:"16/9",objectFit:"cover",borderRadius:12}}/>}<button type="button" className="danger" disabled={busy} onClick={() => {setCover("");setMessage("保存后移除封面 / Save to remove the cover.");}}>Remove cover / 移除封面</button></div>}<label>Upload / Replace 上传或更换<input type="file" accept="image/*" disabled={busy} onChange={event => {void upload(event.target.files?.[0]);event.target.value="";}}/></label><p role="status" aria-live="polite" className="hint">{message || "封面用于资源列表和文章详情页 / Shown on the guide card and detail page."}</p></div>;
 }
