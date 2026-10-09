@@ -13,7 +13,7 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
   const sections = Array.isArray(page.content?.sections) ? page.content.sections as any[] : [];
   const content = page.content || {};
 
-  return <form className="admin-form" action={action}>
+  return <form id={`page-${page.slug}`} className="admin-form" action={action}>
     <h2>{page.title}</h2>
     <label>Admin Label / Page Title<input name="title" defaultValue={page.title}/></label>
     <label>Eyebrow Text<input name="eyebrow" defaultValue={page.eyebrow}/></label>
@@ -56,12 +56,36 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
       </div>)}
     </>}
 
-    {(page.slug === "factory" || page.slug === "oem-odm") && <>
-      <h3>{page.slug === "oem-odm" ? "Customization Sections" : "Factory Sections"}</h3>
+    {page.slug === "factory" && <>
+      <h3>Factory Sections</h3>
       {[1, 2, 3, 4, 5].map((n, i) => <div className="admin-form-grid" key={n}>
         <label>Section {n} Title<input name={`section_title_${n}`} defaultValue={sections[i]?.title}/></label>
         <RichTextEditor name={`section_body_${n}`} label={`Section ${n} Description`} defaultValue={String(sections[i]?.body || "")}/>
       </div>)}
+    </>}
+    {page.slug === "oem-odm" && <>
+      <h3>OEM / ODM 图片与文字</h3>
+      <p className="hint">图片顺序：第一张为顶部大图；第二至第七张对应下方六个板块。上传后保存生效。推荐使用真实产品开发或工厂照片。</p>
+      <label>Capability tags / 能力标签（英文逗号分隔）<input name="oem_tags" defaultValue={String(content.oem_tags || "Custom Product Development,Private Label,Custom Packaging,Quality Control")}/></label>
+      <label>Project title / 咨询标题<input name="oem_project_title" defaultValue={String(content.oem_project_title || "Start Your OEM Project")}/></label>
+      <label>Project description / 咨询介绍<textarea name="oem_project_body" defaultValue={String(content.oem_project_body || "Tell us what you want to develop, your target market and estimated order quantity. Our team will review your requirements and discuss the next steps.")}/></label>
+      <label>Button label / 按钮文字<input name="oem_button_label" defaultValue={String(content.oem_button_label || "Request an OEM Quote")}/></label>
+      {["Product Development","Customization Options","Manufacturing Capabilities","Quality Assurance","OEM Project Workflow","MOQ & Lead Time"].map((title,i)=><div className="admin-form-grid" key={title}>
+        <label>Section {i+1} title / 标题<input name={`section_title_${i+1}`} defaultValue={sections[i]?.title || title}/></label>
+        <RichTextEditor name={`section_body_${i+1}`} label={`Section ${i+1} description / 正文`} defaultValue={String(sections[i]?.body || "")}/>
+      </div>)}
+      <label>OEM FAQ / 问答（每行 Question | Answer）<textarea name="oem_faqs" defaultValue={Array.isArray(content.oem_faqs) ? (content.oem_faqs as {question:string;answer:string}[]).map(item=>`${item.question} | ${item.answer}`).join("\n") : ""}/></label>
+    </>}
+
+    {page.slug === "resources" && <>
+      <h3>Product &amp; sourcing Guides 栏目</h3>
+      <div className="admin-form-grid">
+        <label>Title / 标题<input name="section_title_1" defaultValue={String(sections[0]?.title || "Product & sourcing")}/></label>
+        <label>Accent / 强调文字<input name="section_body_1" defaultValue={String(sections[0]?.body || "Guides")}/></label>
+        <label>Small heading / 小标题<input name="section_title_2" defaultValue={String(sections[1]?.title || "Buyer Knowledge")}/></label>
+        <label>Description / 介绍<textarea name="section_body_2" defaultValue={String(sections[1]?.body || "Product selection, customization and sourcing guidance for your next lighting project.")}/></label>
+      </div>
+      <p className="hint">下方 Page Images 第一张图片作为栏目图片。每篇指南的封面和正文，请在 Product &amp; sourcing Guides 中编辑。</p>
     </>}
 
     {page.slug === "products" && <>

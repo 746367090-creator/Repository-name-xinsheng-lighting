@@ -2,7 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 const inquiryTypes = ["Product Purchase", "OEM / ODM Request", "Sample Request", "Technical Support"];
-export default function ContactForm() {
+export default function ContactForm({defaultInquiryType="Product Purchase"}:{defaultInquiryType?:string}) {
   const params = useSearchParams();
   const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
@@ -29,7 +29,7 @@ export default function ContactForm() {
     <label className="architecture-form-label">Product / model<input className="field" name="product" defaultValue={params.get("product") || ""}/></label>
     <label className="architecture-form-label">Expected quantity<input className="field" name="quantity" placeholder="e.g. 500 pieces"/></label>
     <label className="architecture-form-label">Application<input className="field" name="application" placeholder="e.g. retail gifting"/></label>
-    <label className="architecture-form-label full">Inquiry type<select className="field" name="inquiry_type" defaultValue={inquiryTypes.includes(requestedType) ? requestedType : "Product Purchase"}>{inquiryTypes.map(type => <option key={type}>{type}</option>)}</select></label>
+    <label className="architecture-form-label full">Inquiry type<select className="field" name="inquiry_type" defaultValue={inquiryTypes.includes(requestedType) ? requestedType : (inquiryTypes.includes(defaultInquiryType) ? defaultInquiryType : "Product Purchase")}>{inquiryTypes.map(type => <option key={type}>{type}</option>)}</select></label>
     <input type="hidden" name="annual_volume" value=""/>
     <label className="architecture-form-label full">Project requirements *<textarea className="field" name="message" placeholder="Target market, required functions, customization, quantity and timeline…" required/></label>
     <button className="btn-primary full" type="submit" disabled={sending}>{sending ? "Sending…" : "Send Your Inquiry"}</button>

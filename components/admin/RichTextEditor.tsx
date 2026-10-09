@@ -1,9 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
-export default function RichTextEditor({ name, defaultValue = "", label }: { name: string; defaultValue?: string; label: string }) {
+export default function RichTextEditor({ name, defaultValue = "", label, enableImages = false, onImageBusy }: { name: string; defaultValue?: string; label: string; enableImages?: boolean; onImageBusy?: (busy:boolean)=>void }) {
   const editor = useRef<HTMLDivElement>(null);
+  const [imageBusy, setImageBusy] = useState(false);
+  const [imageMessage, setImageMessage] = useState("");
+  const selectedImage = useRef<HTMLImageElement | null>(null);
   const hidden = useRef<HTMLInputElement>(null);
   function sync() { if (hidden.current && editor.current) hidden.current.value = editor.current.innerHTML; }
   function command(type: string, value?: string) {
@@ -11,6 +15,24 @@ export default function RichTextEditor({ name, defaultValue = "", label }: { nam
     document.execCommand(type, false, value);
     sync();
   }
+  async function insertImage(file?:File) {
+    if (!file) return;
+    if (!file.type.startsWith("image/") || file.size > 10*1024*1024) {setImageMessage("请选择10MB以内的图片。");return;}
+    setImageBusy(true);onImageBusy?.(true);setImageMessage("正在上传图片…");
+    try {
+      const client=createClient();
+      const extension=file.name.split(".").pop()?.replace(/[^a-zA-Z0-9]/g,"") || "jpg";
+      const path=`guides/${crypto.randomUUID()}.${extension}`;
+      const {error}=await client.storage.from("media").upload(path,file,{contentType:file.type,upsert:false});
+      if(error)throw error;
+      const {data}=client.storage.from("media").getPublicUrl(path);
+      const image=document.createElement("img");image.src=data.publicUrl;image.alt=file.name;image.style.maxWidth="100%";
+      const paragraph=document.createElement("p");paragraph.appendChild(document.createElement("br"));
+      editor.current?.append(image,paragraph);sync();setImageMessage("图片已加入正文，保存后发布。点击正文图片后，可用移除图片按钮删除。");
+    } catch(error){setImageMessage(error instanceof Error?error.message:"上传失败，请重试。");}
+    finally{setImageBusy(false);onImageBusy?.(false);}
+  }
+  function removeImage(){const image=selectedImage.current;if(image&&editor.current?.contains(image)){image.remove();selectedImage.current=null;sync();setImageMessage("图片已从正文移除，保存后生效。");}else{setImageMessage("请先点击正文中要移除的图片。");}}
   function addLink() {
     const url = window.prompt("Enter link URL");
     if (url) command("createLink", url);
@@ -43,6 +65,7 @@ export default function RichTextEditor({ name, defaultValue = "", label }: { nam
       <button type="button" onClick={() => command("unlink")}>Unlink</button>
       <button type="button" onClick={() => command("removeFormat")}>Clear</button>
     </div>
-    <div ref={editor} className="rich-editor" contentEditable suppressContentEditableWarning onInput={sync} onBlur={sync} dangerouslySetInnerHTML={{ __html: defaultValue }}/>
+    {enableImages && <div className="rich-toolbar"><label>Insert body image / 插入正文图片<input type="file" accept="image/*" disabled={imageBusy} onChange={event=>{void insertImage(event.target.files?.[0]);event.target.value="";}}/></label><button type="button" disabled={imageBusy} onClick={removeImage}>Remove selected image / 移除选中图片</button><span role="status" aria-live="polite">{imageMessage}</span></div>}
+    <div ref={editor} className="rich-editor" contentEditable suppressContentEditableWarning onInput={sync} onBlur={sync} onClick={event=>{if(event.target instanceof HTMLImageElement)selectedImage.current=event.target}} dangerouslySetInnerHTML={{ __html: defaultValue }}/>
   </label>;
 }
