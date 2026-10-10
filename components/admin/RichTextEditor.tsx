@@ -9,9 +9,39 @@ export default function RichTextEditor({ name, defaultValue = "", label, enableI
   const [imageMessage, setImageMessage] = useState("");
   const selectedImage = useRef<HTMLImageElement | null>(null);
   const hidden = useRef<HTMLInputElement>(null);
+  const savedSelection = useRef<Range | null>(null);
+
+  function rememberSelection() {
+    const selection = window.getSelection();
+    if (selection?.rangeCount && editor.current?.contains(selection.anchorNode)) {
+      savedSelection.current = selection.getRangeAt(0).cloneRange();
+    }
+  }
+
+  function restoreSelection() {
+    editor.current?.focus();
+    const selection = window.getSelection();
+    if (selection && savedSelection.current) {
+      selection.removeAllRanges();
+      selection.addRange(savedSelection.current);
+    }
+  }
+
+  function setExactFontSize(px: number) {
+    restoreSelection();
+    document.execCommand("fontSize", false, "7");
+    editor.current?.querySelectorAll('font[size="7"]').forEach(font => {
+      const span = document.createElement("span");
+      span.style.fontSize = px + "px";
+      span.innerHTML = font.innerHTML;
+      font.replaceWith(span);
+    });
+    sync();
+    rememberSelection();
+  }
   function sync() { if (hidden.current && editor.current) hidden.current.value = editor.current.innerHTML; }
   function command(type: string, value?: string) {
-    editor.current?.focus();
+    restoreSelection();
     document.execCommand(type, false, value);
     sync();
   }
@@ -39,7 +69,7 @@ export default function RichTextEditor({ name, defaultValue = "", label, enableI
   }
   return <label className="rich-editor-label">{label}
     <input ref={hidden} type="hidden" name={name} defaultValue={defaultValue}/>
-    <div className="rich-toolbar" role="toolbar" aria-label={`${label} formatting`}>
+    <div className="rich-toolbar" onMouseDownCapture={rememberSelection} role="toolbar" aria-label={`${label} formatting`}>
       <button type="button" onClick={() => command("bold")}><strong>B</strong></button>
       <button type="button" onClick={() => command("italic")}><em>I</em></button>
       <button type="button" onClick={() => command("underline")}><u>U</u></button>
@@ -49,12 +79,17 @@ export default function RichTextEditor({ name, defaultValue = "", label, enableI
         <option value="h3">Heading 3</option>
         <option value="blockquote">Quote</option>
       </select>
-      <select aria-label="Font size" defaultValue="3" onChange={event => command("fontSize", event.target.value)}>
-        <option value="2">Small</option>
-        <option value="3">Normal</option>
-        <option value="4">Large</option>
-        <option value="5">Extra large</option>
-      </select>
+      <select aria-label="Font size in pixels"
+          defaultValue=""
+          onChange={event => {
+            if (event.target.value) setExactFontSize(Number(event.target.value));
+            event.target.value = "";
+          }}>
+          <option value="">Font Size / 字号</option>
+          {[12,14,16,18,20,24,28,32,36,40].map(size =>
+            <option key={size} value={size}>{size}px</option>
+          )}
+        </select>
       <button type="button" onClick={() => command("insertUnorderedList")}>• List</button>
       <button type="button" onClick={() => command("insertOrderedList")}>1. List</button>
       <button type="button" onClick={() => command("justifyLeft")}>Left</button>
@@ -66,6 +101,6 @@ export default function RichTextEditor({ name, defaultValue = "", label, enableI
       <button type="button" onClick={() => command("removeFormat")}>Clear</button>
     </div>
     {enableImages && <div className="rich-toolbar"><label>Insert body image / 插入正文图片<input type="file" accept="image/*" disabled={imageBusy} onChange={event=>{void insertImage(event.target.files?.[0]);event.target.value="";}}/></label><button type="button" disabled={imageBusy} onClick={removeImage}>Remove selected image / 移除选中图片</button><span role="status" aria-live="polite">{imageMessage}</span></div>}
-    <div ref={editor} className="rich-editor" contentEditable suppressContentEditableWarning onInput={sync} onBlur={sync} onClick={event=>{if(event.target instanceof HTMLImageElement)selectedImage.current=event.target}} dangerouslySetInnerHTML={{ __html: defaultValue }}/>
+    <div ref={editor} className="rich-editor" contentEditable suppressContentEditableWarning onInput={sync} onMouseUp={rememberSelection} onKeyUp={rememberSelection} onBlur={sync} onClick={event=>{if(event.target instanceof HTMLImageElement)selectedImage.current=event.target}} dangerouslySetInnerHTML={{ __html: defaultValue }}/>
   </label>;
 }
