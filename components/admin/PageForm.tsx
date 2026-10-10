@@ -19,7 +19,25 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
     <label>Admin Label / Page Title<input name="title" defaultValue={page.title}/></label>
     <label>Eyebrow Text<input name="eyebrow" defaultValue={page.eyebrow}/></label>
     <label>Main Heading<input name="heading" defaultValue={page.heading}/></label>
-    <label>Main Description<textarea name="body" defaultValue={page.body}/></label>
+    <div className="main-description-field">
+      {["applications", "resources", "faq"].includes(page.slug)
+        ? <RichTextEditor
+            name="body"
+            label="Main Description / 主描述"
+            defaultValue={page.body || ""}
+          />
+        : <div className="main-description-field">
+      {["applications", "resources", "faq"].includes(page.slug)
+        ? <RichTextEditor
+            name="body"
+            label="Main Description / 主描述"
+            defaultValue={page.body || ""}
+          />
+        : <label>Main Description<textarea name="body" defaultValue={page.body}/></label>
+      }
+    </div>
+      }
+    </div>
 
     {page.slug === "home" && <>
       <h3>Homepage Buttons</h3>
