@@ -28,3 +28,33 @@
 .site-footer{background:#1a1510;color:#fff;padding:68px 0 28px}.footer-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:48px}.footer-grid p,.footer-grid a{color:#b8afa4;font-size:13px}.footer-grid h4{margin-top:0}.footer-links{display:grid;gap:8px}.footer-bottom{border-top:1px solid #382f27;margin-top:42px;padding-top:22px;color:#8f857b;font-size:12px;display:flex;justify-content:space-between}
 @media(max-width:980px){.desktop-nav{display:none}.menu-btn{display:block}.mobile-menu.open{display:grid;padding:20px 24px;border-top:1px solid var(--line);gap:13px}.stats,.feature-grid{grid-template-columns:repeat(2,1fr)}.product-grid,.news-grid{grid-template-columns:repeat(2,1fr)}.scene-grid,.scene-page-grid{grid-template-columns:repeat(2,1fr)}.horizontal-products{grid-template-columns:repeat(3,1fr)}.split,.product-detail,.contact-grid{grid-template-columns:1fr}.product-section-heading{grid-template-columns:1fr}.product-info-columns{grid-template-columns:1fr 1fr}.footer-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.container{width:min(100% - 30px,1280px)}.section{padding:72px 0}.header-cta{display:none}.hero{padding-top:78px}.home-hero{min-height:650px}.home-hero.has-media .hero-copy{width:calc(100% - 30px);padding:38px 20px}.hero-copy{padding:68px 0}.display-title{font-size:46px}.trust-items{justify-content:flex-start;padding:14px 0}.stats,.product-grid,.news-grid,.scene-grid,.scene-page-grid,.feature-grid,.three-grid,.form-grid,.spec-grid,.product-info-columns{grid-template-columns:1fr}.horizontal-products{display:flex;overflow-x:auto}.horizontal-products .product-card{min-width:78%}.split{gap:35px}.media-panel{min-height:340px}.media-gallery{grid-template-columns:1fr}.thumbs{flex-direction:row;overflow-x:auto}.thumb{min-width:70px}.carousel-item{min-width:85%}.scene-card-large{height:360px}.product-summary h1{font-size:40px}.spec-table-row,.product-info-row{grid-template-columns:1fr}.spec-table-row strong,.product-info-row strong{border-bottom:1px solid var(--line)}.footer-grid{grid-template-columns:1fr}.footer-bottom{display:grid;gap:6px}.spec-row:nth-last-child(2){border-bottom:1px solid var(--line)}}
+
+/* Feature card rich text support */
+.feature-card-content p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.feature-card-content ul,
+.feature-card-content ol {
+  text-align: left;
+  padding-left: 20px;
+  margin: 12px 0;
+  color: var(--muted);
+}
+
+.feature-card-content a {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.feature-card-content strong {
+  font-weight: 700;
+}
+
+.feature-card-content {
+  line-height: 1.7;
+}
+

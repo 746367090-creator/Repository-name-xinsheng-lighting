@@ -64,7 +64,11 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
       <label>Section Description<input name="why_description" defaultValue={String(content.why_description || "Discuss the manufacturing process and supporting evidence relevant to your project.")}/></label>
       {whyDefaults.map(([title, body], i) => <div className="admin-form-grid" key={title}>
         <label>Card {i + 1} Title<input name={`why_card_title_${i + 1}`} defaultValue={String(content[`why_card_title_${i + 1}`] || title)}/></label>
-        <label>Card {i + 1} Description<textarea name={`why_card_body_${i + 1}`} defaultValue={String(content[`why_card_body_${i + 1}`] || body)}/></label>
+        <RichTextEditor
+          name={`why_card_body_${i + 1}`}
+          label={`Card ${i + 1} Description`}
+          defaultValue={String(content[`why_card_body_${i + 1}`] || body)}
+        />
       </div>)}
       <HomePageFields content={content}/>
     </>}
