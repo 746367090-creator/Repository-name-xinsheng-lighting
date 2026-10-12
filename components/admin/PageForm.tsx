@@ -2,6 +2,7 @@ import HomePageFields from "@/components/admin/HomePageFields";
 import PageMediaUploader from "@/components/admin/PageMediaUploader";
 import type { SitePage } from "@/lib/types";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import DynamicSectionsEditor from "./DynamicSectionsEditor";
 
 const whyDefaults = [
   ["Product development", "Discuss the design brief, sample requirements and specifications for your product."],
@@ -70,10 +71,7 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
 
     {page.slug === "factory" && <>
       <h3>Factory Sections</h3>
-      {[1, 2, 3, 4, 5].map((n, i) => <div className="admin-form-grid" key={n}>
-        <label>Section {n} Title<input name={`section_title_${n}`} defaultValue={sections[i]?.title}/></label>
-        <RichTextEditor name={`section_body_${n}`} label={`Section ${n} Description`} defaultValue={String(sections[i]?.body || "")}/>
-      </div>)}
+      <DynamicSectionsEditor initial={sections}/>
     </>}
     {page.slug === "oem-odm" && <>
       <h3>OEM / ODM 图片与文字</h3>
