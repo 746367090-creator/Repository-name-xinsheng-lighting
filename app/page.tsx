@@ -28,8 +28,8 @@ export default async function Home() {
   ]);
   const content=page?.content || {};
   const text=(key:string)=>{const value=String(content[key] || homeTextDefaults[key] || "");return key==="home_products_body"&&value==="Choose a product series to view the range and discuss your requirements."?homeTextDefaults.home_products_body:value;};
-  const heading=page?.heading === "Illuminate the Future with Intelligent Light" ? "Lighting Products Built for Your Brand" : page?.heading;
-  const eyebrow=page?.eyebrow === "Smart Lighting Solutions Since 2011" ? "Your Lighting Manufacturing Partner" : page?.eyebrow;
+  const heading=page?.heading ? page.heading.replace(/aaa/g,"").trim() : "Custom LED Lighting Solutions for Global Brands";
+  const eyebrow=page?.eyebrow ? page.eyebrow.replace(/123/g,"").trim() : "DECORATIVE LED LIGHTING MANUFACTURER SINCE 2011";
   const approvedSlugs=String(content.home_case_slugs || "").split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
   const selectedCases=content.home_cases_authorized===true ? Array.from(new Set(approvedSlugs)).map(slug=>cases.find(item=>item.slug===slug)).filter((item):item is typeof cases[number]=>!!item).slice(0,3) : [];
   const stats=content.home_stats_verified===true ? [1,2,3,4].filter(i=>content[`stat_value_${i}`]&&content[`stat_label_${i}`]) : [];
