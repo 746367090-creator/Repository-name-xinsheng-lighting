@@ -580,3 +580,15 @@
   margin-top:60px;
 }
 
+
+/* Move homepage statistics closer to hero */
+.stats-band{
+  margin-top:-90px;
+  position:relative;
+  z-index:10;
+}
+
+.stats{
+  position:relative;
+}
+
