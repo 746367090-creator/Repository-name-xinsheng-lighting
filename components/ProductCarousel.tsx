@@ -6,17 +6,31 @@ import { useEffect, useState } from "react";
 export default function ProductCarousel({items}:{items:any[]}) {
 
   const products = items.slice(0,8);
+  const loopProducts = [...products, ...products];
+
   const [index,setIndex] = useState(0);
   const [pause,setPause] = useState(false);
 
   useEffect(()=>{
+
     if(products.length <= 4 || pause) return;
 
-    const timer = setInterval(()=>{
-      setIndex(prev => (prev + 1) % products.length);
+    const timer=setInterval(()=>{
+
+      setIndex(prev=>{
+
+        if(prev >= products.length){
+          return 0;
+        }
+
+        return prev+1;
+
+      });
+
     },3000);
 
     return ()=>clearInterval(timer);
+
   },[products.length,pause]);
 
 
@@ -24,7 +38,8 @@ export default function ProductCarousel({items}:{items:any[]}) {
 
 
   return (
-    <div 
+
+    <div
       className="product-carousel-wrapper"
       onMouseEnter={()=>setPause(true)}
       onMouseLeave={()=>setPause(false)}
@@ -32,7 +47,11 @@ export default function ProductCarousel({items}:{items:any[]}) {
 
       <button
         className="product-carousel-btn prev"
-        onClick={()=>setIndex(prev => (prev - 1 + products.length) % products.length)}
+        onClick={()=>{
+          setIndex(prev =>
+            prev===0 ? products.length-1 : prev-1
+          )
+        }}
       >
         ←
       </button>
@@ -47,7 +66,7 @@ export default function ProductCarousel({items}:{items:any[]}) {
           }}
         >
 
-          {products.map((product:any)=>{
+          {loopProducts.map((product:any,index)=>{
 
             const image =
               product.media?.find((m:any)=>m.type==="image");
@@ -55,16 +74,16 @@ export default function ProductCarousel({items}:{items:any[]}) {
             return (
 
               <Link
-                key={product.id}
+                key={`${product.id}-${index}`}
                 href={`/products/${product.slug}`}
                 className="product-carousel-card"
               >
 
                 {image &&
-                  <img
-                    src={image.url}
-                    alt={image.alt || product.name}
-                  />
+                <img
+                  src={image.url}
+                  alt={image.alt || product.name}
+                />
                 }
 
                 <small>
@@ -92,12 +111,16 @@ export default function ProductCarousel({items}:{items:any[]}) {
 
       <button
         className="product-carousel-btn next"
-        onClick={()=>setIndex(prev => (prev + 1) % products.length)}
+        onClick={()=>{
+          setIndex(prev=>prev+1)
+        }}
       >
         →
       </button>
 
 
     </div>
+
   );
+
 }
