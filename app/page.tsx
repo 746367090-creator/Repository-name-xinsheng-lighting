@@ -76,11 +76,6 @@ __html:String(content[`why_card_body_${i+1}`]||body)
 
     <section className="section architecture-soft" id="customer-trust">
       <div className="container">
-        <SectionHead
-          kicker="Customer Trust"
-          title="Trusted Cooperation With Global Buyers"
-          description="Customers and partners visiting XINSHERN for lighting projects and manufacturing cooperation."
-        />
         <CustomerCarousel items={customers}/>
       </div>
     </section>
