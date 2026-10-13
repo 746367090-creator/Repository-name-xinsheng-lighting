@@ -547,3 +547,36 @@
   transform:translateY(-2px);
 }
 
+
+.application-categories{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  margin-top:20px;
+  margin-bottom:80px;
+}
+
+.application-categories a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:140px;
+  padding:18px 32px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  font-size:18px;
+  font-weight:700;
+  text-decoration:none;
+}
+
+.application-categories a.active{
+  background:#f97316;
+  color:#fff;
+  border-color:#f97316;
+}
+
+.application-results{
+  margin-top:60px;
+}
+
