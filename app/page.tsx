@@ -39,7 +39,17 @@ export default async function Home() {
   return <>
     <HeroCarousel items={hero} eyebrow={eyebrow||"Your Lighting Manufacturing Partner"} heading={heading||"Lighting Products Built for Your Brand"} body={page?.body||"Discuss lighting products, development and customization for your brand or market."} ctaLabel={String(content.cta_label||"Submit Project Requirements")} ctaUrl={homepageLink(content.cta_url)||"/#project-inquiry"} catalogLabel="Explore Products" catalogUrl="/products"/>
     <section className="section" id="product-series"><div className="container"><SectionHead kicker="Selected products" title={text("home_products_title")} description={text("home_products_body")}/><ProductCarousel items={products}/><div className="home-section-actions"><Link href="/products" className="text-link">View all products →</Link></div></div></section>
-    <section className="section architecture-soft" id="why-xinshern"><div className="container"><SectionHead kicker="Why choose XINSHERN" title={String(content.why_title||"Review the capabilities")} accent={String(content.why_accent||"behind your product")} description={String(content.why_description||"Discuss the manufacturing process and supporting evidence relevant to your project.")}/><div className="feature-grid">{capabilities.map(([Icon,title,body],i)=>{const evidence=homepageLink(content[`why_evidence_${i+1}`]);return <article className="card feature-card" key={title}><div className="feature-icon"><Icon aria-hidden="true"/></div><h3>{String(content[`why_card_title_${i+1}`]||title)}</h3><div
+    <section className="section architecture-soft" id="why-xinshern"><div className="container"><SectionHead kicker="Why choose XINSHERN" title={String(content.why_title||"Review the capabilities")} accent={String(content.why_accent||"behind your product")} description={String(content.why_description||"Discuss the manufacturing process and supporting evidence relevant to your project.")}/><div className="feature-grid">{capabilities.map(([Icon,title,body],i)=>{const evidence=homepageLink(content[`why_evidence_${i+1}`]);return <article className="card feature-card" key={title}>{content[`why_image_${i+1}`] ? (
+<img
+className="feature-image"
+src={String(content[`why_image_${i+1}`])}
+alt={title}
+/>
+) : (
+<div className="feature-icon">
+<Icon aria-hidden="true"/>
+</div>
+)}<h3>{String(content[`why_card_title_${i+1}`]||title)}</h3><div
 className="feature-card-content"
 dangerouslySetInnerHTML={{
 __html:String(content[`why_card_body_${i+1}`]||body)

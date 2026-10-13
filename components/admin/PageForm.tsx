@@ -2,6 +2,7 @@ import HomePageFields from "@/components/admin/HomePageFields";
 import PageMediaUploader from "@/components/admin/PageMediaUploader";
 import type { SitePage } from "@/lib/types";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import WhyImageUploader from "./WhyImageUploader";
 import DynamicSectionsEditor from "./DynamicSectionsEditor";
 
 const whyDefaults = [
@@ -63,6 +64,10 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
       </div>
       <label>Section Description<input name="why_description" defaultValue={String(content.why_description || "Discuss the manufacturing process and supporting evidence relevant to your project.")}/></label>
       {whyDefaults.map(([title, body], i) => <div className="admin-form-grid" key={title}>
+        <WhyImageUploader
+          index={i+1}
+          value={String(content[`why_image_${i+1}`] || "")}
+        />
         <label>Card {i + 1} Title<input name={`why_card_title_${i + 1}`} defaultValue={String(content[`why_card_title_${i + 1}`] || title)}/></label>
         <RichTextEditor
           name={`why_card_body_${i + 1}`}
