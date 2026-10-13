@@ -143,7 +143,56 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
       <label>OEM FAQ / 问答（每行 Question | Answer）<textarea name="oem_faqs" defaultValue={Array.isArray(content.oem_faqs) ? (content.oem_faqs as {question:string;answer:string}[]).map(item=>`${item.question} | ${item.answer}`).join("\n") : ""}/></label>
     </>}
 
-    {page.slug === "resources" && <>
+    {page.slug === "applications" && <>
+  <h3>Applications Capability / 应用能力模块</h3>
+
+  {[
+    ["OEM / ODM Development",
+    "From concept development to mass production, we support customized lighting projects."],
+    ["Custom Lighting Solutions",
+    "Product design, packaging and private label solutions for global brands."],
+    ["Quality Control",
+    "Inspection and production management throughout the manufacturing process."],
+    ["Global Supply Support",
+    "Reliable export support for distributors, retailers and international buyers."]
+  ].map(([title,body],i)=>
+    <div className="admin-form-grid" key={i}>
+
+      <label>
+        Capability Image {i+1} / 图片
+        <input
+          type="file"
+          name={`application_image_file_${i+1}`}
+          accept="image/*"
+        />
+        <input
+          type="hidden"
+          name={`application_image_${i+1}`}
+          defaultValue={String(content[`application_image_${i+1}`] || "")}
+        />
+      </label>
+
+      <label>
+        Capability Title {i+1}
+        <input
+          name={`application_title_${i+1}`}
+          defaultValue={String(content[`application_title_${i+1}`] || title)}
+        />
+      </label>
+
+      <label>
+        Capability Description {i+1}
+        <textarea
+          name={`application_body_${i+1}`}
+          defaultValue={String(content[`application_body_${i+1}`] || body)}
+        />
+      </label>
+
+    </div>
+  )}
+</>}
+
+{page.slug === "resources" && <>
       <h3>Product &amp; sourcing Guides 栏目</h3>
       <div className="admin-form-grid">
         <label>Title / 标题<input name="section_title_1" defaultValue={String(sections[0]?.title || "Product & sourcing")}/></label>

@@ -57,7 +57,10 @@ for (let i = 1; i <= 4; i++) {
 ...Object.fromEntries([1,2,3,4].flatMap(i=>[
 [`home_factory_image_${i}`,String(factoryUploads[`home_factory_image_${i}`] || form.get(`home_factory_image_${i}`) || "")],
 [`home_factory_title_${i}`,String(form.get(`home_factory_title_${i}`)||"")],
-[`home_factory_body_${i}`,String(form.get(`home_factory_body_${i}`)||"")]
+[`home_factory_body_${i}`,String(form.get(`home_factory_body_${i}`)||"")],
+[`application_image_${i}`,String(form.get(`application_image_${i}`)||"")],
+[`application_title_${i}`,String(form.get(`application_title_${i}`)||"")],
+[`application_body_${i}`,String(form.get(`application_body_${i}`)||"")]
 ])),...Object.fromEntries([1,2,3,4].flatMap(i=>[[`why_card_title_${i}`,String(form.get(`why_card_title_${i}`)||"")],[`why_card_body_${i}`,String(form.get(`why_card_body_${i}`)||"")],[`why_image_${i}`,String(form.get(`why_image_${i}`)||"")]])),sections:Array.from({length:20},(_,index)=>index+1)
 .map(i=>({
  title:String(form.get(`section_title_${i}`)||""),
