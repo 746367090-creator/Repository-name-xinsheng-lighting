@@ -9,6 +9,7 @@ import ContentGrid from "@/components/ContentGrid";
 import FAQAccordion from "@/components/FAQAccordion";
 import ContactForm from "@/components/ContactForm";
 import CustomerCarousel from "@/components/CustomerCarousel";
+import ProductCarousel from "@/components/ProductCarousel";
 import type { QA } from "@/lib/types";
 export const revalidate = 60;
 const capabilities = [
@@ -37,7 +38,7 @@ export default async function Home() {
   const faqs=Array.isArray(content.home_faqs)&&content.home_faqs.length ? content.home_faqs as QA[] : homeFAQs;
   return <>
     <HeroCarousel items={hero} eyebrow={eyebrow||"Your Lighting Manufacturing Partner"} heading={heading||"Lighting Products Built for Your Brand"} body={page?.body||"Discuss lighting products, development and customization for your brand or market."} ctaLabel={String(content.cta_label||"Submit Project Requirements")} ctaUrl={homepageLink(content.cta_url)||"/#project-inquiry"} catalogLabel="Explore Products" catalogUrl="/products"/>
-    <section className="section" id="product-series"><div className="container"><SectionHead kicker="Selected products" title={text("home_products_title")} description={text("home_products_body")}/><div className="category-grid">{products.map(product=>{const image=product.media?.find(m=>m.type==="image");return <Link href={`/products/${product.slug}`} className="category-tile" key={product.id}>{image&&<img src={image.url} alt={image.alt||product.name} loading="lazy"/>}<div><p className="home-product-category">{product.category}</p><h3>{product.name}</h3><span>View product →</span></div></Link>})}</div><div className="home-section-actions"><Link href="/products" className="text-link">View all products →</Link></div></div></section>
+    <section className="section" id="product-series"><div className="container"><SectionHead kicker="Selected products" title={text("home_products_title")} description={text("home_products_body")}/><ProductCarousel items={products}/><div className="home-section-actions"><Link href="/products" className="text-link">View all products →</Link></div></div></section>
     <section className="section architecture-soft" id="why-xinshern"><div className="container"><SectionHead kicker="Why choose XINSHERN" title={String(content.why_title||"Review the capabilities")} accent={String(content.why_accent||"behind your product")} description={String(content.why_description||"Discuss the manufacturing process and supporting evidence relevant to your project.")}/><div className="feature-grid">{capabilities.map(([Icon,title,body],i)=>{const evidence=homepageLink(content[`why_evidence_${i+1}`]);return <article className="card feature-card" key={title}><div className="feature-icon"><Icon aria-hidden="true"/></div><h3>{String(content[`why_card_title_${i+1}`]||title)}</h3><div
 className="feature-card-content"
 dangerouslySetInnerHTML={{
