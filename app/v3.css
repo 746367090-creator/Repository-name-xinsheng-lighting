@@ -518,3 +518,32 @@
   }
 }
 
+
+.application-categories{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  margin-bottom:60px;
+  margin-top:20px;
+}
+
+.application-categories a{
+  padding:16px 36px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:white;
+  font-weight:700;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.application-categories a.active{
+  background:#f97316;
+  color:white;
+  border-color:#f97316;
+}
+
+.application-categories a:hover{
+  transform:translateY(-2px);
+}
+
