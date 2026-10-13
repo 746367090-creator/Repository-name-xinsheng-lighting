@@ -92,10 +92,16 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
 <div className="admin-form-grid" key={i}>
 
 <label>
-Factory Image {i+1} URL
+Factory Image {i+1} Upload / 上传图片
 <input
+type="file"
+name={`home_factory_image_file_${i+1}`}
+accept="image/*"
+/>
+<input
+type="hidden"
 name={`home_factory_image_${i+1}`}
-defaultValue={String(content[`home_factory_image_${i+1}`] || "")}
+value={String(content[`home_factory_image_${i+1}`] || "")}
 />
 </label>
 
