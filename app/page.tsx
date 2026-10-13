@@ -34,7 +34,23 @@ export default async function Home() {
   const approvedSlugs=String(content.home_case_slugs || "").split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
   const selectedCases=content.home_cases_authorized===true ? Array.from(new Set(approvedSlugs)).map(slug=>cases.find(item=>item.slug===slug)).filter((item):item is typeof cases[number]=>!!item).slice(0,3) : [];
   const stats=content.home_stats_verified===true ? [1,2,3,4].filter(i=>content[`stat_value_${i}`]&&content[`stat_label_${i}`]) : [];
-  const photos=content.home_photos_verified===true ? (page?.media?.length ? page.media.map((item,i)=>({url:item.url,type:item.type,title:String(content[`home_factory_title_${i+1}`]||item.alt||""),body:String(content[`home_factory_body_${i+1}`]||"")})) : factory.filter(item=>item.media_type!=="document").map((item,i)=>({url:item.media_url,type:item.media_type,title:String(content[`home_factory_title_${i+1}`]||item.title),body:String(content[`home_factory_body_${i+1}`]||item.caption||"" )}))).slice(0,4) : [];
+  const photos=[
+1,2,3,4
+].map(i=>({
+url:String(content[`home_factory_image_${i}`]||""),
+type:"image",
+title:String(content[`home_factory_title_${i}`]||""),
+body:String(content[`home_factory_body_${i}`]||"")
+})).filter(item=>item.url).length>0
+?
+[1,2,3,4].map(i=>({
+url:String(content[`home_factory_image_${i}`]||""),
+type:"image",
+title:String(content[`home_factory_title_${i}`]||""),
+body:String(content[`home_factory_body_${i}`]||"")
+})).filter(item=>item.url)
+:
+(content.home_photos_verified===true ? (page?.media?.length ? page.media.map((item,i)=>({url:item.url,type:item.type,title:String(content[`home_factory_title_${i+1}`]||item.alt||""),body:String(content[`home_factory_body_${i+1}`]||"")})) : factory.filter(item=>item.media_type!=="document").map((item,i)=>({url:item.media_url,type:item.media_type,title:String(content[`home_factory_title_${i+1}`]||item.title),body:String(content[`home_factory_body_${i+1}`]||item.caption||"" )}))).slice(0,4) : []);
   const faqs=Array.isArray(content.home_faqs)&&content.home_faqs.length ? content.home_faqs as QA[] : homeFAQs;
   return <>
     <HeroCarousel items={hero} eyebrow={eyebrow||"Your Lighting Manufacturing Partner"} heading={heading||"Lighting Products Built for Your Brand"} body={page?.body||"Discuss lighting products, development and customization for your brand or market."} ctaLabel={String(content.cta_label||"Submit Project Requirements")} ctaUrl={homepageLink(content.cta_url)||"/#project-inquiry"} catalogLabel="Explore Products" catalogUrl="/products"/>

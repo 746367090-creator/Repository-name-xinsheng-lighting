@@ -76,6 +76,47 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
         />
       </div>)}
       <HomePageFields content={content}/>
+
+<h3>Factory & Quality Images / 工厂质量图片</h3>
+
+{[
+["LED Lighting Production Workshop",
+"A view of the lighting production and assembly area, showing the working environment and manufacturing activities."],
+["Product Assembly & Manufacturing",
+"Lighting product assembly operations, including component preparation, product assembly and manufacturing coordination."],
+["Quality Control Process",
+"Quality inspection procedures and production control process."],
+["Manufacturing Capabilities",
+"Factory capabilities, production support and customer cooperation."]
+].map(([title,body],i)=>
+<div className="admin-form-grid" key={i}>
+
+<label>
+Factory Image {i+1} URL
+<input
+name={`home_factory_image_${i+1}`}
+defaultValue={String(content[`home_factory_image_${i+1}`] || "")}
+/>
+</label>
+
+<label>
+Factory Title {i+1}
+<input
+name={`home_factory_title_${i+1}`}
+defaultValue={String(content[`home_factory_title_${i+1}`] || title)}
+/>
+</label>
+
+<label>
+Factory Description {i+1}
+<textarea
+name={`home_factory_body_${i+1}`}
+defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
+/>
+</label>
+
+</div>
+)}
     </>}
 
     {page.slug === "factory" && <>
