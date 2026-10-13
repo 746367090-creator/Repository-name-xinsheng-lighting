@@ -1,5 +1,18 @@
 import SectionHead from "@/components/SectionHead";
 import AllProductsBrowser from "@/components/AllProductsBrowser";
-import { getCategories, getPage, getProducts } from "@/lib/queries";
+import { getCategories, getPage, getProducts, getGallery } from "@/lib/queries";
 export const metadata={title:"All Products",description:"Search and browse all Xinshern lighting products by category."};
-export default async function Products({searchParams}:{searchParams:{category?:string}}){const[all,categoryRows,page]=await Promise.all([getProducts(),getCategories(),getPage("products")]);const selected=searchParams.category,productCategories=[...new Set(all.map(product=>product.category))],categories=[...categoryRows.map(category=>category.name),...productCategories.filter(name=>!categoryRows.some(category=>category.name===name))],sections=Array.isArray(page?.content?.sections)?page.content.sections as any[]:[];return <section className="section"><div className="container"><SectionHead kicker={page?.eyebrow||"Product Center"} title={selected||page?.heading||"All Products"} accent={selected?"":"Collection"} description={page?.body||"Browse our complete product range, organized by lighting category."}/><AllProductsBrowser products={all} categories={categories} selectedCategory={selected} searchPlaceholder={String(sections[0]?.title||"Search by product name, model or category")} searchHelp={String(sections[0]?.body||"Search all products")} emptyMessage={String(sections[1]?.title||"No matching products found.")} countLabel={String(sections[1]?.body||"products")}/></div></section>}
+export default async function Products({searchParams}:{searchParams:{category?:string}}){const[all,categoryRows,page,catalog]=await Promise.all([getProducts(),getCategories(),getPage("products"),getGallery("catalog")]);
+const latestCatalog=catalog[0];const selected=searchParams.category,productCategories=[...new Set(all.map(product=>product.category))],categories=[...categoryRows.map(category=>category.name),...productCategories.filter(name=>!categoryRows.some(category=>category.name===name))],sections=Array.isArray(page?.content?.sections)?page.content.sections as any[]:[];return <section className="section"><div className="container"><SectionHead kicker={page?.eyebrow||"Product Center"} title={selected||page?.heading||"All Products"} accent={selected?"":"Collection"} description={page?.body||"Browse our complete product range, organized by lighting category."}/>
+
+{String(latestCatalog?.media_url || "") &&
+<a
+  href={String(latestCatalog?.media_url)}
+  className="btn-primary product-catalog-download"
+  target="_blank"
+  rel="noreferrer"
+  download
+>
+  Download Product Catalog
+</a>
+}<AllProductsBrowser products={all} categories={categories} selectedCategory={selected} searchPlaceholder={String(sections[0]?.title||"Search by product name, model or category")} searchHelp={String(sections[0]?.body||"Search all products")} emptyMessage={String(sections[1]?.title||"No matching products found.")} countLabel={String(sections[1]?.body||"products")}/></div></section>}
