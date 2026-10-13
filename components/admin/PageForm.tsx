@@ -52,7 +52,7 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
 
       <h3>Verified Statistics / 经核实数据</h3>
       <p className="hint">Use verified figures only. Leave a value empty to hide it; keep factory area consistent with the Factory page.</p>
-      {[ ["14+", "Years Experience"], ["3,000", "Units / Day"], ["3,000m²", "Factory Area"], ["20+", "Markets Served"] ].map(([value, label], i) => <div className="admin-form-grid" key={i}>
+      {[ ["15", "YEARS IN LIGHTING INDUSTRY"], ["20", "DAILY PRODUCTION CAPACITY"], ["50000", "FACTORY AREA (M²)"], ["20", "EXPORT MARKETS SERVED"] ].map(([value, label], i) => <div className="admin-form-grid" key={i}>
         <label>Statistic {i + 1} Value<input name={`stat_value_${i + 1}`} defaultValue={String(content[`stat_value_${i + 1}`] || "")}/></label>
         <label>Statistic {i + 1} Label<input name={`stat_label_${i + 1}`} defaultValue={String(content[`stat_label_${i + 1}`] || label)}/></label>
       </div>)}
