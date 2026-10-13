@@ -471,3 +471,14 @@
   }
 }
 
+
+.catalog-download{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:20px;
+  padding:14px 28px;
+  border-radius:999px;
+  font-weight:600;
+}
+
