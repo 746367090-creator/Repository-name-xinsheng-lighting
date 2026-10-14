@@ -46,17 +46,7 @@ export default async function Applications({
       <div className="container">
 
 
-        <div className="application-tabs">
-        {categories.map(([key,label])=>
-          <Link
-            key={key}
-            href={`/applications?category=${key}`}
-            className={category===key ? "active":""}
-          >
-            {label}
-          </Link>
-        )}
-        </div>
+        
 
 
         <SectionHead
