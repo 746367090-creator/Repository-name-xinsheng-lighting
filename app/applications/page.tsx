@@ -198,31 +198,40 @@ Content will be published soon.
 
 <>
 <section className="section">
+<div className="application-section-head">
 <h2>Project Cases</h2>
+<p>Real projects delivered for global brands with customized LED lighting solutions.</p>
+</div>
 <ContentGrid
 items={caseEntries.slice(0,3)}
 base="/applications/cases"
 />
-<Link href="/applications?category=case">
+<Link className="application-view-all" href="/applications?category=case">
 View All Cases →
 </Link>
 </section>
 
 
 <section className="section">
+<div className="application-section-head">
 <h2>Application Guides</h2>
+<p>Insights for lighting buyers, importers and sourcing teams.</p>
+</div>
 <ContentGrid
 items={guideEntries.slice(0,3)}
 base="/solutions"
 />
-<Link href="/applications?category=guides">
+<Link className="application-view-all" href="/applications?category=guides">
 View All Guides →
 </Link>
 </section>
 
 
 <section className="section">
+<div className="application-section-head">
 <h2>Lighting Scenes</h2>
+<p>Explore LED lighting solutions across different applications and markets.</p>
+</div>
 
 <div className="scene-page-grid">
 {scenes.slice(0,3).map(scene=>
@@ -236,7 +245,7 @@ View All Guides →
 )}
 </div>
 
-<Link href="/applications?category=scenes">
+<Link className="application-view-all" href="/applications?category=scenes">
 View All Scenes →
 </Link>
 
