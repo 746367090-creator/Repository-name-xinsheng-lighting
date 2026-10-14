@@ -102,7 +102,7 @@ export default async function Applications({
 
 <div className="capability-card">
 <div className="capability-image">
-<img src={String((page?.content as any)?.application_image_1 || "/images/oem-development.jpg")} alt="OEM ODM Development"/>
+<img src={String((page?.content as any)?.application_image_1 || "")} alt="OEM ODM Development"/>
 </div>
 <h3>{String((page?.content as any)?.application_title_1 || "OEM / ODM Development")}</h3>
 <p>
@@ -114,7 +114,7 @@ we support customized lighting projects.
 
 <div className="capability-card">
 <div className="capability-image">
-<img src={String((page?.content as any)?.application_image_2 || "/images/custom-lighting.jpg")} alt="Custom Lighting Solutions"/>
+<img src={String((page?.content as any)?.application_image_2 || "")} alt="Custom Lighting Solutions"/>
 </div>
 <h3>{String((page?.content as any)?.application_title_2 || "Custom Lighting Solutions")}</h3>
 <p>
@@ -126,7 +126,7 @@ solutions for global brands.
 
 <div className="capability-card">
 <div className="capability-image">
-<img src={String((page?.content as any)?.application_image_3 || "/images/quality-control.jpg")} alt="Quality Control"/>
+<img src={String((page?.content as any)?.application_image_3 || "")} alt="Quality Control"/>
 </div>
 <h3>{String((page?.content as any)?.application_title_3 || "Quality Control")}</h3>
 <p>
@@ -138,7 +138,7 @@ throughout the manufacturing process.
 
 <div className="capability-card">
 <div className="capability-image">
-<img src={String((page?.content as any)?.application_image_4 || "/images/global-supply.jpg")} alt="Global Supply Support"/>
+<img src={String((page?.content as any)?.application_image_4 || "")} alt="Global Supply Support"/>
 </div>
 <h3>{String((page?.content as any)?.application_title_4 || "Global Supply Support")}</h3>
 <p>
