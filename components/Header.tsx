@@ -18,7 +18,7 @@ export default function Header({ categories }: { categories: string[] }) {
           <Link href={href} aria-current={pathname.startsWith(href) ? "page" : undefined}>{label}</Link>
           <div className="mega-menu application-menu">
             {[["case","Case"],["guides","Application Guides"],["scenes","Scenes"]].map(([key,title])=>
-              <Link key={key} href={`/applications?category=${key}`}>{title}</Link>
+              <Link key={key} href={`/applications#${key}`}>{title}</Link>
             )}
           </div>
         </div>

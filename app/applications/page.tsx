@@ -187,7 +187,7 @@ Content will be published soon.
 :
 
 <>
-<section className="section">
+<section id="case" className="section">
 <div className="application-section-head">
 <h2>Project Cases</h2>
 <p>Real projects delivered for global brands with customized LED lighting solutions.</p>
@@ -202,7 +202,7 @@ View All Cases →
 </section>
 
 
-<section className="section">
+<section id="guides" className="section">
 <div className="application-section-head">
 <h2>Application Guides</h2>
 <p>Insights for lighting buyers, importers and sourcing teams.</p>
@@ -217,7 +217,7 @@ View All Guides →
 </section>
 
 
-<section className="section">
+<section id="scenes" className="section">
 <div className="application-section-head">
 <h2>Lighting Scenes</h2>
 <p>Explore LED lighting solutions across different applications and markets.</p>
