@@ -43,13 +43,20 @@ const applicationImages:any = {};
 
 for(let i=1;i<=4;i++){
 
-  const uploaded = await uploadFiles(
-    form,
-    `application_image_file_${i}`
-  );
+  const file = form.get(`application_image_file_${i}`) as File;
 
-  if(uploaded[0]?.url){
-    applicationImages[`application_image_${i}`]=uploaded[0].url;
+  if(file && file.size > 0){
+
+    const uploadForm = new FormData();
+
+    uploadForm.append("media", file);
+
+    const uploaded = await uploadFiles(uploadForm);
+
+    if(uploaded[0]?.url){
+      applicationImages[`application_image_${i}`]=uploaded[0].url;
+    }
+
   }
 
 }
