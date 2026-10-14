@@ -258,7 +258,12 @@ View All Scenes →
     </section>
 
 
-    <ProjectCTA />
+    <ProjectCTA
+  title="Need a custom lighting solution?"
+  description="From product development to mass production, XINSHERN supports global brands with OEM/ODM services, customization and reliable manufacturing solutions."
+  button="Request OEM Quote"
+  href="/contact?application=OEM%20%2F%20ODM%20Request"
+/>
 
     </>
   );
