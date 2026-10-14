@@ -22,21 +22,21 @@ export default async function Applications({
   searchParams:{category?:string}
 }){
 
-  const category =
-    categories.some(([key])=>key===searchParams.category)
-    ? searchParams.category!
-    : "case";
+  const category = searchParams.category || "";
 
-
-  const [page, entries, scenes] = await Promise.all([
+  const [page, caseEntries, guideEntries, scenes] = await Promise.all([
     getPage("applications"),
-    category !== "scenes"
-      ? getContentEntries(category==="case" ? "case" : "solution")
-      : Promise.resolve([]),
-    category==="scenes"
-      ? getGallery("scene")
-      : Promise.resolve([])
+    getContentEntries("case"),
+    getContentEntries("solution"),
+    getGallery("scene")
   ]);
+
+  const entries =
+    category==="case"
+    ? caseEntries
+    : category==="guides"
+    ? guideEntries
+    : [];
 
 
   return (
@@ -160,42 +160,89 @@ retailers and international buyers.
       <div className="container">
 
       {
-      category==="scenes"
-      ?
-      <div className="scene-page-grid">
-      {scenes.map(scene=>
-        <article className="scene-card scene-card-large" key={scene.id}>
-        {
-        scene.media_type==="video"
-        ?
-        <SmartVideo src={scene.media_url} title={scene.title}/>
-        :
-        <img src={scene.media_url} alt={scene.title}/>
-        }
-        <div className="scene-overlay">
-        <h2>{scene.title}</h2>
-        <p>{scene.caption}</p>
-        </div>
-        </article>
-      )}
-      </div>
+category
+?
+(
+category==="scenes"
+?
+<div className="scene-page-grid">
+{scenes.map(scene=>
+<article className="scene-card scene-card-large" key={scene.id}>
+{scene.media_type==="video"
+?
+<SmartVideo src={scene.media_url} title={scene.title}/>
+:
+<img src={scene.media_url} alt={scene.title}/>
+}
+<div className="scene-overlay">
+<h2>{scene.title}</h2>
+<p>{scene.caption}</p>
+</div>
+</article>
+)}
+</div>
+:
+entries.length
+?
+<ContentGrid
+items={entries}
+base={category==="case"?"/applications/cases":"/solutions"}
+/>
+:
+<div className="empty-detail">
+Content will be published soon.
+</div>
+)
 
-      :
+:
 
-      entries.length
-      ?
-      <ContentGrid
-      items={entries}
-      base={category==="case"?"/applications/cases":"/solutions"}
-      />
+<>
+<section className="section">
+<h2>Project Cases</h2>
+<ContentGrid
+items={caseEntries.slice(0,3)}
+base="/applications/cases"
+/>
+<Link href="/applications?category=case">
+View All Cases →
+</Link>
+</section>
 
-      :
 
-      <div className="empty-detail">
-      Content will be published soon.
-      </div>
+<section className="section">
+<h2>Application Guides</h2>
+<ContentGrid
+items={guideEntries.slice(0,3)}
+base="/solutions"
+/>
+<Link href="/applications?category=guides">
+View All Guides →
+</Link>
+</section>
 
-      }
+
+<section className="section">
+<h2>Lighting Scenes</h2>
+
+<div className="scene-page-grid">
+{scenes.slice(0,3).map(scene=>
+<article className="scene-card scene-card-large" key={scene.id}>
+<img src={scene.media_url} alt={scene.title}/>
+<div className="scene-overlay">
+<h2>{scene.title}</h2>
+<p>{scene.caption}</p>
+</div>
+</article>
+)}
+</div>
+
+<Link href="/applications?category=scenes">
+View All Scenes →
+</Link>
+
+</section>
+</>
+}
 
       </div>
 
