@@ -972,3 +972,55 @@
 .resources-more > .news-grid {
   margin-top: 24px;
 }
+
+/* Resources expandable buttons: black background, white text */
+.resources-page .resources-more > summary {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 24px;
+  background: #171717 !important;
+  color: #ffffff !important;
+  border: 1px solid #171717 !important;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: pointer;
+  list-style: none;
+  opacity: 1 !important;
+}
+
+.resources-page .resources-more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.resources-page .resources-more > summary::marker {
+  content: "";
+}
+
+.resources-page .resources-more > summary::after {
+  content: "+";
+  display: inline-block;
+  color: #ffffff !important;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.resources-page .resources-more[open] > summary::after {
+  content: "\2212";
+  color: #ffffff !important;
+}
+
+.resources-page .resources-more > summary:hover {
+  background: #333333 !important;
+  border-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+.resources-page .resources-more > summary * {
+  color: #ffffff !important;
+}
