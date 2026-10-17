@@ -144,6 +144,100 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
         <label>Section {i+1} title / 标题<input name={`section_title_${i+1}`} defaultValue={sections[i]?.title || title}/></label>
         <RichTextEditor name={`section_body_${i+1}`} label={`Section ${i+1} description / 正文`} defaultValue={String(sections[i]?.body || (i === 4 ? "01 — Customer Inquiry & Requirements\n02 — Product Matching & Feasibility Review\n03 — Quotation & Order Confirmation\n04 — Sample Development\n05 — Customer Sample Approval\n06 — Material Preparation & Incoming QC\n07 — Mass Production & Process Inspection\n08 — Functional Testing & Aging\n09 — Final Inspection & Packaging\n10 — Shipment & Delivery" : ""))}/>
       </div>)}
+      <h3>OEM / ODM Workflow Cards / 流程卡片编辑</h3>
+      <p className="hint">分别编辑四套流程的标题和每一步文字。前台使用网页原生文字展示，不需要上传流程图图片。</p>
+      {[
+        {
+          key: "workflow_existing_oem",
+          title: "Existing Product · OEM",
+          steps: [
+            "Customer puts forward modification requirements",
+            "Recommend existing product solution",
+            "Evaluate modification scope",
+            "Quotation & order confirmation",
+            "Make revised sample",
+            "Customer sample confirmation",
+            "Material procurement + IQC incoming inspection",
+            "Mass production | Aging test",
+            "Finished product inspection",
+            "Inspection & shipment"
+          ]
+        },
+        {
+          key: "workflow_existing_odm",
+          title: "Existing Product · ODM",
+          steps: [
+            "Customer puts forward modification requirements",
+            "Recommend existing product solution",
+            "Evaluate modification scope",
+            "Quotation & order confirmation",
+            "Make revised sample",
+            "Customer sample confirmation",
+            "Material procurement + IQC incoming inspection",
+            "Mass production | Aging test",
+            "Finished product inspection",
+            "Inspection & shipment"
+          ]
+        },
+        {
+          key: "workflow_new_oem",
+          title: "New Product Development · OEM",
+          steps: [
+            "Customer provides new drawings / 3D model",
+            "Engineering DFM review",
+            "Quotation (mold + production) & order confirmation",
+            "Prototype making",
+            "Customer prototype confirmation",
+            "Mold opening + trial mold & mold revision",
+            "Pre-production PP sample making",
+            "Customer PP sample sign-off",
+            "Material procurement + IQC incoming inspection",
+            "Mass production | Aging test",
+            "Finished product inspection",
+            "Inspection & shipment"
+          ]
+        },
+        {
+          key: "workflow_new_odm",
+          title: "New Product Development · ODM",
+          steps: [
+            "Customer puts forward new product concept",
+            "Factory structural & electronic design",
+            "3D modeling & DFM review",
+            "Quotation & order confirmation",
+            "Prototype making",
+            "Customer prototype confirmation",
+            "New mold opening + repeated mold revision",
+            "Pre-production PP sample making",
+            "Customer PP sample sign-off",
+            "Material procurement + IQC incoming inspection",
+            "Mass production | Aging test",
+            "Finished product inspection",
+            "Inspection & shipment"
+          ]
+        }
+      ].map((workflow) => (
+        <div className="admin-workflow-editor" key={workflow.key}>
+          <h4>{workflow.title}</h4>
+          <label>Workflow Title / 流程标题
+            <input
+              name={`${workflow.key}_title`}
+              defaultValue={String(content[`${workflow.key}_title`] || workflow.title)}
+            />
+          </label>
+          <div className="admin-form-grid">
+            {workflow.steps.map((step, index) => (
+              <label key={`${workflow.key}_${index + 1}`}>
+                Step {index + 1} / 步骤 {index + 1}
+                <input
+                  name={`${workflow.key}_${index + 1}`}
+                  defaultValue={String(content[`${workflow.key}_${index + 1}`] || step)}
+                />
+              </label>
+            ))}
+          </div>
+        </div>
+      ))}
       <label>OEM FAQ / 问答（每行 Question | Answer）<textarea name="oem_faqs" defaultValue={Array.isArray(content.oem_faqs) ? (content.oem_faqs as {question:string;answer:string}[]).map(item=>`${item.question} | ${item.answer}`).join("\n") : ""}/></label>
     </>}
 

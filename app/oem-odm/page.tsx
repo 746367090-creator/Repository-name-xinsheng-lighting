@@ -4,6 +4,7 @@ import { getPage, getGallery } from "@/lib/queries";
 import RichContent from "@/components/RichContent";
 import FAQAccordion from "@/components/FAQAccordion";
 import ContactForm from "@/components/ContactForm";
+import OEMWorkflow from "@/components/OEMWorkflow";
 import type { QA } from "@/lib/types";
 export const metadata = {title:"OEM & ODM Lighting Manufacturer for Global Brands",description:"Lighting product development, customization, manufacturing, quality assurance and project support for global brands, importers and retailers.",alternates:{canonical:"/oem-odm"}};
 const blocks = [
@@ -34,7 +35,25 @@ export default async function OEM() {
     <div className="kicker">{page?.eyebrow || "OEM & ODM Services"}</div><h1>{heading}</h1><p className="oem-intro">{page?.body || "From concept to mass production, XINSHERN helps brands, importers and retailers develop customized lighting products with tailored designs, packaging and manufacturing support."}</p>
     <div className="tags oem-tags">{tags.map(tag=><span className="tag" key={tag}>{tag}</span>)}</div>
     <div className="oem-project-panel"><h2>{String(content.oem_project_title || "Start Your OEM Project")}</h2><p>{String(content.oem_project_body || "Tell us what you want to develop, your target market and estimated order quantity. Our team will review your requirements and discuss the next steps.")}</p><div className="hero-actions"><Link href="/contact?type=OEM%20%2F%20ODM%20Request" className="btn-primary">{String(content.oem_button_label || "Request an OEM Quote")}</Link><a href="#oem-inquiry" className="btn-secondary">Discuss Your Project</a></div></div>
-    <div className="oem-content-sections">{blocks.map(([title,body],i)=><section className="oem-content-block" key={title}><div className="kicker">0{i+1}</div><h2>{saved[i]?.title || title}</h2><RichContent html={saved[i]?.body || body}/>{images[i+1] && <img src={images[i+1].url} alt={images[i+1].alt || saved[i]?.title || title} className="oem-block-image" loading="lazy"/>}</section>)}</div>
+    <div className="oem-content-sections">
+      {blocks.map(([title,body],i) => i === 4 ? (
+        <div key={title}>
+          <section className="oem-content-block">
+            <div className="kicker">05</div>
+            <h2>{saved[i]?.title || title}</h2>
+            <RichContent html={saved[i]?.body || body}/>
+          </section>
+          <OEMWorkflow content={content as Record<string, unknown>}/>
+        </div>
+      ) : (
+        <section className="oem-content-block" key={title}>
+          <div className="kicker">0{i+1}</div>
+          <h2>{saved[i]?.title || title}</h2>
+          <RichContent html={saved[i]?.body || body}/>
+          {images[i+1] && <img src={images[i+1].url} alt={images[i+1].alt || saved[i]?.title || title} className="oem-block-image" loading="lazy"/>}
+        </section>
+      ))}
+    </div>
     <section className="oem-content-block"><div className="kicker">Questions before you start</div><h2>OEM / ODM FAQ</h2><FAQAccordion items={faqs}/></section>
     <section id="oem-inquiry" className="oem-content-block"><div className="kicker">Your project brief</div><h2>Discuss Your OEM Project</h2><Suspense fallback={<p>Loading inquiry form…</p>}><ContactForm defaultInquiryType="OEM / ODM Request"/></Suspense></section>
   </div></section></>;

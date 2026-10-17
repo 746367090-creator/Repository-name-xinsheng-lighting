@@ -78,3 +78,176 @@
   }
 }
 
+
+
+
+/* OEM / ODM workflows: native text, editable through CMS */
+.oem-workflows {
+  margin: 42px 0 54px;
+  padding: clamp(18px, 3vw, 38px);
+  background: #f7f4ee;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.oem-workflow {
+  padding: 34px 0 42px;
+  border-bottom: 1px solid #e4d9cc;
+  scroll-margin-top: 110px;
+}
+
+.oem-workflow:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.oem-workflow > .kicker {
+  text-align: center;
+}
+
+.oem-workflow > h2 {
+  margin: 8px 0 42px;
+  text-align: center;
+  font-size: clamp(25px, 3vw, 38px);
+  line-height: 1.2;
+}
+
+.oem-workflow-grid {
+  display: grid;
+  gap: 22px;
+  margin: 0 0 32px;
+  align-items: stretch;
+}
+
+.oem-workflow-grid:last-child {
+  margin-bottom: 0;
+}
+
+.oem-workflow-grid.count-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.oem-workflow-grid.count-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.oem-workflow-grid.count-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.oem-workflow-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 136px;
+  margin-top: 12px;
+  padding: 26px 14px 18px;
+  background: #e66119;
+  color: #fff;
+  border-radius: 12px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.oem-workflow-card p {
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.oem-workflow-number {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  color: #171411;
+  border: 1px solid #d8cbbd;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.oem-workflow-grid.is-circle .oem-workflow-card {
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  padding: 28px 13px 16px;
+  border-radius: 50%;
+}
+
+.admin-workflow-editor {
+  padding: 22px;
+  border: 1px solid #e8e0d6;
+  border-radius: 12px;
+  background: #faf8f5;
+}
+
+.admin-workflow-editor h4 {
+  margin: 0 0 18px;
+  font-size: 18px;
+}
+
+.admin-workflow-editor > label {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 1100px) {
+  .oem-workflow-grid.count-6,
+  .oem-workflow-grid.count-7 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .oem-workflow-grid.count-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .oem-workflow-grid.is-circle .oem-workflow-card {
+    aspect-ratio: auto;
+    min-height: 135px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .oem-workflows {
+    padding: 16px;
+  }
+
+  .oem-workflow {
+    padding: 28px 0;
+  }
+
+  .oem-workflow > h2 {
+    margin-bottom: 30px;
+  }
+
+  .oem-workflow-grid.count-6,
+  .oem-workflow-grid.count-7,
+  .oem-workflow-grid.count-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 14px;
+  }
+
+  .oem-workflow-card,
+  .oem-workflow-grid.is-circle .oem-workflow-card {
+    min-height: 124px;
+    aspect-ratio: auto;
+    padding: 25px 10px 14px;
+    border-radius: 12px;
+  }
+
+  .oem-workflow-card p {
+    font-size: 12px;
+  }
+
+  .admin-workflow-editor {
+    padding: 14px;
+  }
+}

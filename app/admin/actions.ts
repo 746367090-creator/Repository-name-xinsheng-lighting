@@ -91,7 +91,25 @@ const media=[...heroUpload,...keep,...fresh,...direct].slice(0,12);const payload
 [`application_image_${i}`,String(applicationImages[`application_image_${i}`] || form.get(`application_image_${i}`)||"")],
 [`application_title_${i}`,String(form.get(`application_title_${i}`)||"")],
 [`application_body_${i}`,String(form.get(`application_body_${i}`)||"")]
-])) : {}),...(slug === "oem-odm" ? {oem_tags:String(form.get("oem_tags")||""),oem_project_title:String(form.get("oem_project_title")||""),oem_project_body:String(form.get("oem_project_body")||""),oem_button_label:String(form.get("oem_button_label")||""),oem_faqs:faqs(form.get("oem_faqs"))} : {}),video_url:form.get("delete_external_video")==="on"?"":String(form.get("video_url")||""),cta_label:String(form.get("cta_label")||"Request a Quote"),cta_url:String(form.get("cta_url")||"/contact"),catalog_label:String(form.get("catalog_label")||"Download Catalog"),catalog_url:String(form.get("catalog_url")||""),...Object.fromEntries([1,2,3,4].flatMap(i=>[[`stat_value_${i}`,String(form.get(`stat_value_${i}`)||"")],[`stat_label_${i}`,String(form.get(`stat_label_${i}`)||"")]])),partner_kicker:String(form.get("partner_kicker")||"Trusted by"),partner_title:String(form.get("partner_title")||"Partner"),partner_accent:String(form.get("partner_accent")||"Brands"),partner_description:String(form.get("partner_description")||"Selected customer and partner logos."),why_title:String(form.get("why_title")||"Why Partner"),why_accent:String(form.get("why_accent")||"With Us"),why_description:String(form.get("why_description")||"From prototype to mass production, we deliver reliable support at every stage"),
+])) : {}),...(slug === "oem-odm" ? {
+oem_tags:String(form.get("oem_tags")||""),
+oem_project_title:String(form.get("oem_project_title")||""),
+oem_project_body:String(form.get("oem_project_body")||""),
+oem_button_label:String(form.get("oem_button_label")||""),
+oem_faqs:faqs(form.get("oem_faqs")),
+...Object.fromEntries([
+  ["workflow_existing_oem", 10],
+  ["workflow_existing_odm", 10],
+  ["workflow_new_oem", 12],
+  ["workflow_new_odm", 13]
+].flatMap(([key, count]) => [
+  [`${key}_title`, String(form.get(`${key}_title`) || "")],
+  ...Array.from({length:Number(count)}, (_, index) => [
+    `${key}_${index + 1}`,
+    String(form.get(`${key}_${index + 1}`) || "")
+  ])
+]))
+} : {}),video_url:form.get("delete_external_video")==="on"?"":String(form.get("video_url")||""),cta_label:String(form.get("cta_label")||"Request a Quote"),cta_url:String(form.get("cta_url")||"/contact"),catalog_label:String(form.get("catalog_label")||"Download Catalog"),catalog_url:String(form.get("catalog_url")||""),...Object.fromEntries([1,2,3,4].flatMap(i=>[[`stat_value_${i}`,String(form.get(`stat_value_${i}`)||"")],[`stat_label_${i}`,String(form.get(`stat_label_${i}`)||"")]])),partner_kicker:String(form.get("partner_kicker")||"Trusted by"),partner_title:String(form.get("partner_title")||"Partner"),partner_accent:String(form.get("partner_accent")||"Brands"),partner_description:String(form.get("partner_description")||"Selected customer and partner logos."),why_title:String(form.get("why_title")||"Why Partner"),why_accent:String(form.get("why_accent")||"With Us"),why_description:String(form.get("why_description")||"From prototype to mass production, we deliver reliable support at every stage"),
 ...Object.fromEntries([1,2,3,4].flatMap(i=>[
 [`home_factory_image_${i}`,String(factoryUploads[`home_factory_image_${i}`] || form.get(`home_factory_image_${i}`) || "")],
 [`home_factory_title_${i}`,String(form.get(`home_factory_title_${i}`)||"")],
