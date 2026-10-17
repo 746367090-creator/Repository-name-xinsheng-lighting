@@ -38,25 +38,6 @@ export default async function OEM() {
     <div className="oem-workflows-placement">
       <OEMWorkflow content={content as Record<string, unknown>}/>
     </div>
-    <div className="oem-content-sections">
-      {blocks.map(([title,body],i) => i === 4 ? (
-        <div key={title}>
-          <section className="oem-content-block">
-            <div className="kicker">05</div>
-            <h2>{saved[i]?.title || title}</h2>
-            <RichContent html={saved[i]?.body || body}/>
-          </section>
-
-        </div>
-      ) : (
-        <section className="oem-content-block" key={title}>
-          <div className="kicker">0{i+1}</div>
-          <h2>{saved[i]?.title || title}</h2>
-          <RichContent html={saved[i]?.body || body}/>
-          {images[i+1] && <img src={images[i+1].url} alt={images[i+1].alt || saved[i]?.title || title} className="oem-block-image" loading="lazy"/>}
-        </section>
-      ))}
-    </div>
     <section className="oem-content-block"><div className="kicker">Questions before you start</div><h2>OEM / ODM FAQ</h2><FAQAccordion items={faqs}/></section>
     <section id="oem-inquiry" className="oem-content-block"><div className="kicker">Your project brief</div><h2>Discuss Your OEM Project</h2><Suspense fallback={<p>Loading inquiry form…</p>}><ContactForm defaultInquiryType="OEM / ODM Request"/></Suspense></section>
   </div></section></>;
