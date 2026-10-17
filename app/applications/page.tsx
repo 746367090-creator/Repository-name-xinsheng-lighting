@@ -60,23 +60,7 @@ export default async function Applications({
         />
 
 
-        <div className="application-actions">
-
-          <Link
-          href="/products"
-          className="btn-secondary"
-          >
-          Explore Products
-          </Link>
-
-          <Link
-          href="/contact?application=OEM%20%2F%20ODM%20Request"
-          className="btn-primary"
-          >
-          Request OEM Quote
-          </Link>
-
-        </div>
+        
 
 
       </div>
