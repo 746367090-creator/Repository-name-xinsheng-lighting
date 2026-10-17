@@ -38,6 +38,9 @@ export async function createCategory(form:FormData){const s=requiredClient();con
 export async function updateCategory(id:string,form:FormData){const s=requiredClient();const name=String(form.get("name")||"").trim();if(!name)throw new Error("Category name is required.");const payload={name,slug:String(form.get("slug")||slugify(name)),description:String(form.get("description")||""),sort_order:Number(form.get("sort_order")||0),published:form.get("published")==="on"};const{error}=await s.from("product_categories").update(payload).eq("id",id);if(error)throw error;revalidatePath("/products");revalidatePath("/");redirect("/admin/categories")}
 export async function deleteCategory(id:string){const s=requiredClient();const{error}=await s.from("product_categories").delete().eq("id",id);if(error)throw error;revalidatePath("/products");revalidatePath("/")}
 export async function savePage(slug:string,existing:MediaItem[],form:FormData){const s=requiredClient();const fresh=await uploadFiles(form);
+const heroUpload = slug === "oem-odm"
+  ? await uploadFiles(form, "oem_hero_image_file")
+  : [];
 
 const applicationImages:any = {};
 
@@ -78,7 +81,12 @@ for (let i = 1; i <= 4; i++) {
   }
 }
 
-let direct:MediaItem[]=[];try{const parsed=JSON.parse(String(form.get("uploaded_page_media")||"[]"));if(Array.isArray(parsed))direct=parsed.filter(item=>item&&(["image","video"] as string[]).includes(item.type)&&typeof item.url==="string")}catch{}const keep=existing.filter((_,i)=>form.get(`delete_page_media_${i}`)!=="on");const media=[...keep,...fresh,...direct].slice(0,12);const payload={slug,title:String(form.get("title")||slug),eyebrow:String(form.get("eyebrow")||""),heading:String(form.get("heading")||""),body:String(form.get("body")||""),content:{...(slug === "home" ? homepageFields(form) : {}),
+let direct:MediaItem[]=[];try{const parsed=JSON.parse(String(form.get("uploaded_page_media")||"[]"));if(Array.isArray(parsed))direct=parsed.filter(item=>item&&(["image","video"] as string[]).includes(item.type)&&typeof item.url==="string")}catch{}const firstImageIndex=existing.findIndex(item=>item.type==="image");
+const keep=existing.filter((item,i)=>
+  form.get(`delete_page_media_${i}`)!=="on" &&
+  !(slug==="oem-odm" && heroUpload.length>0 && i===firstImageIndex)
+);
+const media=[...heroUpload,...keep,...fresh,...direct].slice(0,12);const payload={slug,title:String(form.get("title")||slug),eyebrow:String(form.get("eyebrow")||""),heading:String(form.get("heading")||""),body:String(form.get("body")||""),content:{...(slug === "home" ? homepageFields(form) : {}),
 ...(slug === "applications" ? Object.fromEntries([1,2,3,4].flatMap(i=>[
 [`application_image_${i}`,String(applicationImages[`application_image_${i}`] || form.get(`application_image_${i}`)||"")],
 [`application_title_${i}`,String(form.get(`application_title_${i}`)||"")],

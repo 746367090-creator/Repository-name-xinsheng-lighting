@@ -131,6 +131,10 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
     </>}
     {page.slug === "oem-odm" && <>
       <h3>OEM / ODM 图片与文字</h3>
+      <label>Hero Image / 顶部主图（上传新图片即可替换现有主图）
+        <input type="file" name="oem_hero_image_file" accept="image/*"/>
+      </label>
+      <p className="hint">上传后点击页面底部 Save。新图片将替换顶部主图，其他板块图片保持不变。</p>
       <p className="hint">图片顺序：第一张为顶部大图；第二至第七张对应下方六个板块。上传后保存生效。推荐使用真实产品开发或工厂照片。</p>
       <label>Capability tags / 能力标签（英文逗号分隔）<input name="oem_tags" defaultValue={String(content.oem_tags || "Custom Product Development,Private Label,Custom Packaging,Quality Control")}/></label>
       <label>Project title / 咨询标题<input name="oem_project_title" defaultValue={String(content.oem_project_title || "Start Your OEM Project")}/></label>
