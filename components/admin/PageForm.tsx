@@ -138,7 +138,7 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
       <label>Button label / 按钮文字<input name="oem_button_label" defaultValue={String(content.oem_button_label || "Request an OEM Quote")}/></label>
       {["Product Development","Customization Options","Manufacturing Capabilities","Quality Assurance","OEM Project Workflow","MOQ & Lead Time"].map((title,i)=><div className="admin-form-grid" key={title}>
         <label>Section {i+1} title / 标题<input name={`section_title_${i+1}`} defaultValue={sections[i]?.title || title}/></label>
-        <RichTextEditor name={`section_body_${i+1}`} label={`Section ${i+1} description / 正文`} defaultValue={String(sections[i]?.body || "")}/>
+        <RichTextEditor name={`section_body_${i+1}`} label={`Section ${i+1} description / 正文`} defaultValue={String(sections[i]?.body || (i === 4 ? "01 — Customer Inquiry & Requirements\n02 — Product Matching & Feasibility Review\n03 — Quotation & Order Confirmation\n04 — Sample Development\n05 — Customer Sample Approval\n06 — Material Preparation & Incoming QC\n07 — Mass Production & Process Inspection\n08 — Functional Testing & Aging\n09 — Final Inspection & Packaging\n10 — Shipment & Delivery" : ""))}/>
       </div>)}
       <label>OEM FAQ / 问答（每行 Question | Answer）<textarea name="oem_faqs" defaultValue={Array.isArray(content.oem_faqs) ? (content.oem_faqs as {question:string;answer:string}[]).map(item=>`${item.question} | ${item.answer}`).join("\n") : ""}/></label>
     </>}
