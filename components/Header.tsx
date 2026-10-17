@@ -26,10 +26,10 @@ export default function Header({ categories }: { categories: string[] }) {
         <div key={href} className="nav-dropdown">
           <Link href={href} aria-current={pathname.startsWith(href) ? "page" : undefined}>{label}</Link>
           <div className="mega-menu">
-            <Link href="/products">Product Catalog</Link>
-            <Link href="/resources">Buyer Guides</Link>
-            <Link href="/faq">Purchasing FAQ</Link>
-            <Link href="/news">News & Updates</Link>
+            <Link href="/resources#buyer-guides">Buyer Guides</Link>
+            <Link href="/resources#news">News</Link>
+            <Link href="/resources#purchasing-faq">Purchasing FAQ</Link>
+            <Link href="/resources#product-catalog">Product Catalog</Link>
           </div>
         </div>
       ) : (
