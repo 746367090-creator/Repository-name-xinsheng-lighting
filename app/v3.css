@@ -845,7 +845,7 @@
 }
 
 /* Resources dropdown: vertical menu */
-.nav-dropdown:has(a[href="/resources#buyer-guides"]) {
+.nav-dropdown:has(a[href="/resources#buyer-guides"]) > .mega-menu {
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
@@ -856,7 +856,7 @@
   padding: 14px !important;
 }
 
-.nav-dropdown:has(a[href="/resources#buyer-guides"]) > a {
+.nav-dropdown:has(a[href="/resources#buyer-guides"]) > .mega-menu > a {
   display: flex !important;
   align-items: center;
   width: 100% !important;
