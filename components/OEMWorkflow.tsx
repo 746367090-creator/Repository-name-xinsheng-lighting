@@ -67,7 +67,7 @@ const workflows: WorkflowGroup[] = [
     key: "workflow_new_odm",
     title: "New Product Development · ODM",
     shape: "circle",
-    firstRowCount: 6,
+    firstRowCount: 7,
     steps: [
       "Customer puts forward new product concept",
       "Factory structural & electronic design",
