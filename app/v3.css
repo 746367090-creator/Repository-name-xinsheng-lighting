@@ -932,3 +932,43 @@
     padding-top: 12px !important;
   }
 }
+
+/* Expandable lists for Resources */
+.resources-more {
+  margin-top: 26px;
+}
+
+.resources-more summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.resources-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.resources-more summary::after {
+  content: "+";
+  margin-left: 12px;
+  color: var(--orange);
+  font-size: 20px;
+}
+
+.resources-more[open] summary::after {
+  content: "-";
+}
+
+.resources-more > .content-grid,
+.resources-more > .news-grid {
+  margin-top: 24px;
+}

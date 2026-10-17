@@ -115,7 +115,15 @@ export default async function Resources() {
           </div>
 
           {rows.length > 0 ? (
-            <ContentGrid items={rows.slice(0, 6)} base="/resources" />
+            <>
+              <ContentGrid items={rows.slice(0, 3)} base="/resources" />
+              {rows.length > 3 && (
+                <details className="resources-more">
+                  <summary>View All Buyer Guides ({rows.length - 3} more)</summary>
+                  <ContentGrid items={rows.slice(3)} base="/resources" />
+                </details>
+              )}
+            </>
           ) : (
             <div className="empty-detail">
               Buyer guides will appear here when published.
@@ -137,9 +145,6 @@ export default async function Resources() {
               </p>
             </div>
             <div className="resource-module-actions">
-              <Link className="btn-secondary" href="/news">
-                Read News
-              </Link>
               <Link
                 className="btn-primary"
                 href="/contact?application=News%20and%20Product%20Inquiry"
@@ -150,29 +155,59 @@ export default async function Resources() {
           </div>
 
           {news.length > 0 ? (
-            <div className="news-grid">
-              {news.slice(0, 3).map(post => (
-                <Link
-                  href={`/news/${encodeURIComponent(post.slug)}`}
-                  className="card"
-                  key={post.id}
-                >
-                  <div className="news-cover content-cover-16x9">
-                    {post.cover_url ? (
-                      <img src={post.cover_url} alt={post.title} />
-                    ) : (
-                      <span className="accent news-star">✦</span>
-                    )}
+            <>
+              <div className="news-grid">
+                {news.slice(0, 3).map(post => (
+                  <Link
+                    href={`/news/${encodeURIComponent(post.slug)}`}
+                    className="card"
+                    key={post.id}
+                  >
+                    <div className="news-cover content-cover-16x9">
+                      {post.cover_url ? (
+                        <img src={post.cover_url} alt={post.title} />
+                      ) : (
+                        <span className="accent news-star">✦</span>
+                      )}
+                    </div>
+                    <div className="news-info">
+                      <small>{post.category}</small>
+                      <h3>{post.title}</h3>
+                      <p>{post.excerpt}</p>
+                      <span className="text-link">Read Article →</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              {news.length > 3 && (
+                <details className="resources-more">
+                  <summary>View All News ({news.length - 3} more)</summary>
+                  <div className="news-grid">
+                    {news.slice(3).map(post => (
+                      <Link
+                        href={`/news/${encodeURIComponent(post.slug)}`}
+                        className="card"
+                        key={post.id}
+                      >
+                        <div className="news-cover content-cover-16x9">
+                          {post.cover_url ? (
+                            <img src={post.cover_url} alt={post.title} />
+                          ) : (
+                            <span className="accent news-star">✦</span>
+                          )}
+                        </div>
+                        <div className="news-info">
+                          <small>{post.category}</small>
+                          <h3>{post.title}</h3>
+                          <p>{post.excerpt}</p>
+                          <span className="text-link">Read Article →</span>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                  <div className="news-info">
-                    <small>{post.category}</small>
-                    <h3>{post.title}</h3>
-                    <p>{post.excerpt}</p>
-                    <span className="text-link">Read Article →</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                </details>
+              )}
+            </>
           ) : (
             <div className="empty-detail">
               No published news is available yet.
