@@ -1024,3 +1024,22 @@
 .resources-page .resources-more > summary * {
   color: #ffffff !important;
 }
+
+/* Applications capability cards: text only, no image placeholders */
+.application-capabilities .capability-image {
+  display: none !important;
+}
+
+.application-capabilities .capability-card {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.application-capabilities .capability-card h3 {
+  margin-top: 0;
+  padding-top: 22px;
+}
+
+.application-capabilities .capability-card p {
+  padding-bottom: 22px;
+}
