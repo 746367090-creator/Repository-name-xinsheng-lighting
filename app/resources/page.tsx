@@ -119,7 +119,7 @@ export default async function Resources() {
               <ContentGrid items={rows.slice(0, 3)} base="/resources" />
               {rows.length > 3 && (
                 <details className="resources-more">
-                  <summary>View All Buyer Guides ({rows.length - 3} more)</summary>
+                  <summary>View All Buyer Guides</summary>
                   <ContentGrid items={rows.slice(3)} base="/resources" />
                 </details>
               )}
@@ -181,7 +181,7 @@ export default async function Resources() {
               </div>
               {news.length > 3 && (
                 <details className="resources-more">
-                  <summary>View All News ({news.length - 3} more)</summary>
+                  <summary>View All News</summary>
                   <div className="news-grid">
                     {news.slice(3).map(post => (
                       <Link
