@@ -16,6 +16,11 @@ export default function NewsForm({ post, action }: { post?: NewsPost; action: (f
     <RichTextEditor name="content" label="Article Content" defaultValue={post?.content || ""}/>
     <input type="hidden" name="existing_cover" value={post?.cover_url || ""}/>
     <label>Cover Image<input type="file" name="cover" accept="image/*"/></label>
+    {post?.cover_url && <img className="admin-form-cover-preview" src={post.cover_url} alt={post.title}/>} 
+    <h2>SEO &amp; AI / GEO</h2>
+    <div className="admin-seo-grid"><label>SEO Title<input name="seo_title" defaultValue={post?.seo?.title}/></label><label>SEO Keywords<input name="seo_keywords" defaultValue={post?.seo?.keywords}/></label></div>
+    <label className="seo-description-field">SEO Description<textarea name="seo_description" defaultValue={post?.seo?.description}/></label>
+    <label>AI Summary<textarea name="ai_summary" defaultValue={post?.ai_summary}/></label>
     <label>Status<select name="status" defaultValue={post?.status || "draft"}><option value="draft">Draft</option><option value="published">Published</option></select></label>
     <button className="btn-primary">Save News Post</button>
   </form>;

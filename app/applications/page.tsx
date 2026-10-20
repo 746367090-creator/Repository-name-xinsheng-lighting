@@ -12,7 +12,7 @@ export const metadata = {
 
 const categories = [
   ["case","Case"],
-  ["guides","Application Guides"],
+  ["guides","Solution"],
   ["scenes","Scenes"]
 ];
 
@@ -180,7 +180,7 @@ View All Cases →
 
 <section id="guides" className="section">
 <div className="application-section-head">
-<h2>Application Guides</h2>
+<h2>Solution</h2>
 <p>Insights for lighting buyers, importers and sourcing teams.</p>
 </div>
 <ContentGrid

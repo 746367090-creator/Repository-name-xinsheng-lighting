@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
-const links = [["/", "Home"], ["/oem-odm", "OEM / ODM"], ["/factory", "Factory & Quality"], ["/applications", "Applications"], ["/about", "About Us"], ["/resources", "Resources"]];
+const links = [["/", "Home"], ["/oem-odm", "OEM / ODM"], ["/factory", "Factory"], ["/applications", "Applications"], ["/about", "About Us"], ["/resources", "Resources"]];
 export default function Header({ categories }: { categories: string[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export default function Header({ categories }: { categories: string[] }) {
         <div key={href} className="nav-dropdown">
           <Link href={href} aria-current={pathname.startsWith(href) ? "page" : undefined}>{label}</Link>
           <div className="mega-menu application-menu">
-            {[["case","Case"],["guides","Application Guides"],["scenes","Scenes"]].map(([key,title])=>
+            {[["case","Case"],["guides","Solution"],["scenes","Scenes"]].map(([key,title])=>
               <Link key={key} href={`/applications#${key}`}>{title}</Link>
             )}
           </div>

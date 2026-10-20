@@ -4,7 +4,7 @@ import GalleryCarousel from "@/components/GalleryCarousel";
 import ProjectCTA from "@/components/ProjectCTA";
 import RichContent from "@/components/RichContent";
 
-export const metadata = { title: "Factory & Quality", alternates: { canonical: "/factory" } };
+export const metadata = { title: "Factory", alternates: { canonical: "/factory" } };
 
 function youtubeEmbedUrl(value: string) {
   try {
@@ -30,7 +30,17 @@ export default async function FactoryPage() {
     ["Additional Services", "Logistics, compliance, Amazon FBA preparation, warehousing and mixed-container support."],
   ];
   const saved = Array.isArray(page?.content?.sections) ? page.content.sections as any[] : [];
-  const blocks = defaults.map((item, index) => [saved[index]?.title || item[0], saved[index]?.body || item[1]]);
+  const blockCount = Math.max(defaults.length, saved.length);
+
+  const blocks = Array.from({ length: blockCount }, (_, index) => {
+    const fallback = defaults[index] || ["Additional Factory Section", ""];
+    const section = saved[index] || {};
+
+    return [
+      section.title || fallback[0],
+      section.body || fallback[1]
+    ];
+  }).filter(block => String(block[0] || "").trim() || String(block[1] || "").trim());
   const externalVideo = typeof page?.content?.video_url === "string" ? page.content.video_url.trim() : "";
   const embedVideo = youtubeEmbedUrl(externalVideo);
   const uploadedMedia = page?.media?.find(item => item.type === "video") || page?.media?.[0];

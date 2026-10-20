@@ -28,12 +28,12 @@ create table if not exists public.site_media (
 );
 create table if not exists public.news (
   id uuid primary key default gen_random_uuid(), slug text unique not null, title text not null, excerpt text default '', content text default '',
-  category text default 'Company', cover_url text default '', published_at date default current_date,
+  category text default 'Company', cover_url text default '', seo jsonb not null default '{}', ai_summary text default '', published_at date default current_date,
   status text default 'draft' check(status in ('draft','published')), created_at timestamptz default now(), updated_at timestamptz default now()
 );
 create table if not exists public.inquiries (
   id uuid primary key default gen_random_uuid(), full_name text not null, company_name text default '', email text not null,
-  phone text default '', inquiry_type text default '', annual_volume text default '', message text not null,
+  phone text default '', inquiry_type text default '', annual_volume text default '', message text not null, spam_marked_at timestamptz,
   status text default 'new', created_at timestamptz default now()
 );
 create table if not exists public.quotes (

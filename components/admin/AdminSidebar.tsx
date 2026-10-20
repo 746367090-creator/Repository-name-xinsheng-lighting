@@ -4,7 +4,7 @@ import { usePathname,useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 const groups=[
  {title:"产品管理",links:[["/admin/products","产品 / Products"],["/admin/categories","产品分类"]]},
- {title:"网站内容",links:[["/admin/content","网站页面 / Pages"],["/admin/about","公司介绍 / About Us"],["/admin/applications","应用与案例"],["/admin/guides","采购指南"],["/admin/news","新闻资讯"],["/admin/library","知识与FAQ"]]},
+ {title:"网站内容",links:[["/admin/content","网站页面 / Pages"],["/admin/about","公司介绍 / About Us"],["/admin/applications","案例与 Solutions"],["/admin/guides","采购指南"],["/admin/news","新闻资讯"],["/admin/library","知识与 FAQ"]]},
  {title:"资料与素材",links:[["/admin/media","图片与视频"],["/admin/catalog","产品目录 PDF"],["/admin/customers","客户照片与Logo"]]},
  {title:"客户业务",links:[["/admin/inquiries","询盘管理"],["/admin/quotes","报价管理"]]},
  {title:"系统设置",links:[["/admin/seo","SEO与公司资料"]]},

@@ -1,2 +1,22 @@
-import FAQAccordion from"@/components/FAQAccordion";import SectionHead from"@/components/SectionHead";import{getContentEntries,getPage}from"@/lib/queries";
-export const metadata={title:"FAQ"};const defaults=[{title:"General Questions",items:[{question:"What lighting products do you manufacture?",answer:"Our main categories include festival, gift, ambient, home, outdoor and commercial lighting."},{question:"Do you provide OEM and ODM services?",answer:"Yes. We support product development, functions, branding, manuals and packaging."}]},{title:"Order & Quality",items:[{question:"What is your typical MOQ?",answer:"MOQ varies by product and customization. Contact us with the model and expected quantity."},{question:"How do you control quality?",answer:"We use incoming, in-process, functional and final packing inspections."}]}];export default async function FAQ(){const[page,custom]=await Promise.all([getPage("faq"),getContentEntries("faq")]);const groups=custom.length?custom.map(x=>({title:x.title,items:x.faqs?.length?x.faqs:[{question:x.title,answer:x.content}]})):defaults;return <section className="section"><div className="container"><SectionHead kicker={page?.eyebrow||"Help Center"} title={(page?.heading||"Frequently Asked Questions").replace(/ Questions$/," ")} accent="Questions" description={page?.body}/>{groups.map(g=><section key={g.title} style={{marginTop:55}}><h2>{g.title}</h2><FAQAccordion items={g.items||[]}/></section>)}</div></section>}
+import FAQAccordion from "@/components/FAQAccordion";
+import SectionHead from "@/components/SectionHead";
+import { getContentEntries, getPage } from "@/lib/queries";
+import { pageFAQs } from "@/lib/faq";
+
+export const metadata={title:"FAQ"};
+const defaults=[
+  {title:"General Questions",items:[
+    {question:"What lighting products do you manufacture?",answer:"Our main categories include festival, gift, ambient, home, outdoor and commercial lighting."},
+    {question:"Do you provide OEM and ODM services?",answer:"Yes. We support product development, functions, branding, manuals and packaging."}
+  ]},
+  {title:"Order & Quality",items:[
+    {question:"What is your typical MOQ?",answer:"MOQ varies by product and customization. Contact us with the model and expected quantity."},
+    {question:"How do you control quality?",answer:"We use incoming, in-process, functional and final packing inspections."}
+  ]}
+];
+export default async function FAQ(){
+  const[page,custom]=await Promise.all([getPage("faq"),getContentEntries("faq")]);
+  const legacy=pageFAQs(page?.content,page?.body);
+  const groups=custom.length?custom.map(x=>({title:x.title,items:x.faqs?.length?x.faqs:[{question:x.title,answer:x.content}]})):legacy.length?[{title:"Purchasing FAQ",items:legacy}]:defaults;
+  return <section className="section"><div className="container"><SectionHead kicker={page?.eyebrow||"Help Center"} title={(page?.heading||"Frequently Asked Questions").replace(/ Questions$/," ")} accent="Questions" description={String(page?.content?.faq_intro||"Answers to common questions about products, customization, samples, quality and delivery.")}/>{groups.map(g=><section key={g.title} style={{marginTop:55}}><h2>{g.title}</h2><FAQAccordion items={g.items||[]}/></section>)}</div></section>;
+}

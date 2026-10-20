@@ -39,3 +39,7 @@ npm run dev
 ## 已部署旧版本的更新方法
 
 先在 Supabase SQL Editor 运行一次 `supabase/update-v3.sql`，再将新版代码提交到 GitHub。Vercel 会自动重新部署。
+
+## V4 更新（2026-10-20）
+
+部署本版本前，请先在 Supabase SQL Editor 运行 `supabase/update-v4.sql`。详细内容见 `UPDATE-V4-2026-10-20.md`。

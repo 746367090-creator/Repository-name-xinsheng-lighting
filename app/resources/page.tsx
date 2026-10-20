@@ -3,6 +3,7 @@ import SectionHead from "@/components/SectionHead";
 import ContentGrid from "@/components/ContentGrid";
 import FAQAccordion from "@/components/FAQAccordion";
 import { getContentEntries, getGallery, getPage, getNews } from "@/lib/queries";
+import { pageFAQs } from "@/lib/faq";
 
 export const metadata = {
   title: "LED Lighting Sourcing Guides & Resources",
@@ -70,6 +71,7 @@ export default async function Resources() {
 
   const rows = all.filter(x => ["article", "knowledge"].includes(x.type));
 
+  const savedPageFAQs = pageFAQs(faqPage?.content, faqPage?.body);
   const faqGroups = customFAQs.length
     ? customFAQs.map(item => ({
         title: item.title,
@@ -77,7 +79,9 @@ export default async function Resources() {
           ? item.faqs
           : [{ question: item.title, answer: item.content }]
       }))
-    : defaultFAQs;
+    : savedPageFAQs.length
+      ? [{ title: "Purchasing FAQ", items: savedPageFAQs }]
+      : defaultFAQs;
 
   return (
     <section className="section resources-page">
@@ -222,13 +226,10 @@ export default async function Resources() {
           <div className="resource-module-heading">
             <div>
               <span className="kicker">MODULE 03</span>
-              <h2>
-                {(faqPage?.heading || "Purchasing Frequently Asked Questions")
-                  .replace(/ Questions$/i, "")}
-              </h2>
+              <h2>{faqPage?.heading || "Purchasing Frequently Asked Questions"}</h2>
               <p>
-                {faqPage?.body ||
-                  "Answers about MOQ, samples, customization, production lead times, packaging and delivery."}
+                {String(faqPage?.content?.faq_intro ||
+                  "Answers about MOQ, samples, customization, production lead times, packaging and delivery.")}
               </p>
             </div>
             <div className="resource-module-actions">

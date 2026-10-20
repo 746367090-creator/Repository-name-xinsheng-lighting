@@ -1,9 +1,10 @@
 import HomePageFields from "@/components/admin/HomePageFields";
 import PageMediaUploader from "@/components/admin/PageMediaUploader";
-import type { SitePage } from "@/lib/types";
+import type { GalleryItem, SitePage } from "@/lib/types";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import WhyImageUploader from "./WhyImageUploader";
 import DynamicSectionsEditor from "./DynamicSectionsEditor";
+import { pageFAQs } from "@/lib/faq";
 
 const whyDefaults = [
   ["Product development", "Discuss the design brief, sample requirements and specifications for your product."],
@@ -12,9 +13,10 @@ const whyDefaults = [
   ["Packaging & delivery", "Confirm packaging, labeling and shipment requirements for your market."],
 ];
 
-export default function PageForm({ page, action }: { page: SitePage; action: (form: FormData) => void }) {
+export default function PageForm({ page, factoryGallery = [], action }: { page: SitePage; factoryGallery?: GalleryItem[]; action: (form: FormData) => void }) {
   const sections = Array.isArray(page.content?.sections) ? page.content.sections as any[] : [];
   const content = page.content || {};
+  const faqRows = pageFAQs(content, page.body);
 
   return <form id={`page-${page.slug}`} className="admin-form" action={action}>
     <h2>{page.title}</h2>
@@ -22,20 +24,20 @@ export default function PageForm({ page, action }: { page: SitePage; action: (fo
     <label>Eyebrow Text<input name="eyebrow" defaultValue={page.eyebrow}/></label>
     <label>Main Heading<input name="heading" defaultValue={page.heading}/></label>
     <div className="main-description-field">
-      {["applications", "resources", "faq"].includes(page.slug)
+      {["applications", "resources"].includes(page.slug)
         ? <RichTextEditor
             name="body"
             label="Main Description / 主描述"
             defaultValue={page.body || ""}
           />
         : <div className="main-description-field">
-      {["applications", "resources", "faq"].includes(page.slug)
+      {["applications", "resources"].includes(page.slug)
         ? <RichTextEditor
             name="body"
             label="Main Description / 主描述"
             defaultValue={page.body || ""}
           />
-        : <label>Main Description<textarea name="body" defaultValue={page.body}/></label>
+        : <label>{page.slug==="faq"?"FAQ Introduction / FAQ 简介":"Main Description"}<textarea name="body" defaultValue={page.slug==="faq"?String(content.faq_intro||""):page.body}/></label>
       }
     </div>
       }
@@ -126,8 +128,14 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
     </>}
 
     {page.slug === "factory" && <>
-      <h3>Factory Sections</h3>
-      <DynamicSectionsEditor initial={sections}/>
+      <h3>Factory Sections / 工厂图文</h3>
+      <p className="hint">每一组文字对应一张图片或视频。可直接在这里查看、替换或删除，保存后同步更新 Factory 页面。</p>
+      <DynamicSectionsEditor initial={sections} media={factoryGallery}/>
+    </>}
+    {page.slug === "faq" && <>
+      <h3>FAQ Questions &amp; Answers / 常见问题</h3>
+      <p className="hint">每行填写一组：Question | Answer。前台会自动显示为可展开和收起的 FAQ，不要粘贴 HTML 标签。</p>
+      <label>FAQ Rows / FAQ 内容<textarea name="page_faqs" className="faq-rows-editor" defaultValue={faqRows.map(item=>`${item.question} | ${item.answer}`).join("\n")} placeholder="What is your MOQ? | MOQ depends on the model and quantity."/></label>
     </>}
     {page.slug === "oem-odm" && <>
       <h3>OEM / ODM 图片与文字</h3>
@@ -326,6 +334,14 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
         <label>Factory Tours Description<textarea name="section_body_5" defaultValue={String(sections[4]?.body || "Visits are welcome by appointment.")}/></label>
       </div>
     </>}
+
+    <h2>SEO &amp; AI / GEO</h2>
+    <div className="admin-seo-grid">
+      <label>SEO Title<input name="page_seo_title" defaultValue={String(content.page_seo_title || "")}/></label>
+      <label>SEO Keywords<input name="page_seo_keywords" defaultValue={String(content.page_seo_keywords || "")}/></label>
+    </div>
+    <label className="seo-description-field">SEO Description<textarea name="page_seo_description" defaultValue={String(content.page_seo_description || "")}/></label>
+    <label>AI Summary<textarea name="page_ai_summary" defaultValue={String(content.page_ai_summary || "")}/></label>
 
     <label>External Video URL<input name="video_url" defaultValue={String(content.video_url || "")} placeholder="YouTube or hosted video URL"/></label>
     {content.video_url ? <label className="delete-media-check delete-external-video">

@@ -30,7 +30,7 @@ export default function ProductTable({ products, deleteAction, orderAction, home
       <span>{rows.length} products</span>
     </div>
     <div className="admin-table-wrap"><table className="admin-table">
-      <thead><tr><th>Order</th><th>Model</th><th>Main Image</th><th>Product Name</th><th>Category</th><th>Status</th><th>首页展示</th><th>Media</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Order</th><th>Model</th><th>Thumbnail / 缩略图</th><th>Product Name</th><th>Category</th><th>SEO / AI</th><th>Status</th><th>首页展示</th><th>Media</th><th>Actions</th></tr></thead>
       <tbody>{rows.map(product => {
         const mainImage = product.media?.find(media => media.type === "image");
         return <tr key={product.id}>
@@ -40,7 +40,7 @@ export default function ProductTable({ products, deleteAction, orderAction, home
           </form></td>
           <td><strong>{product.model || "—"}</strong></td>
           <td>{mainImage ? <img className="product-main-thumb" src={mainImage.url} alt={mainImage.alt || `${product.name} main image`}/> : <span className="no-image">No image</span>}</td>
-          <td>{product.name}</td><td>{product.category}</td><td>{product.status}</td><td><button type="button" className="homepage-product-toggle" aria-pressed={product.featured} disabled={!!busy||product.id.startsWith("demo")} onClick={()=>void toggle(product)}>{busy===product.id?"保存中…":product.featured?"✓ 已选定":"选定首页"}</button>{product.featured&&product.status!=="published"&&<small className="hint"> 发布后显示</small>}</td><td>{product.media?.length || 0}/8</td>
+          <td>{product.name}</td><td>{product.category}</td><td><span className={product.seo?.title&&product.seo?.description?"status-ok":"status-missing"}>{product.seo?.title&&product.seo?.description?"SEO ✓":"SEO —"}</span> · <span className={product.ai_summary?"status-ok":"status-missing"}>{product.ai_summary?"AI ✓":"AI —"}</span></td><td>{product.status}</td><td><button type="button" className="homepage-product-toggle" aria-pressed={product.featured} disabled={!!busy||product.id.startsWith("demo")} onClick={()=>void toggle(product)}>{busy===product.id?"保存中…":product.featured?"✓ 已选定":"选定首页"}</button>{product.featured&&product.status!=="published"&&<small className="hint"> 发布后显示</small>}</td><td>{product.media?.length || 0}/8</td>
           <td><Link className="accent" href={`/admin/products/${product.id}`}>Edit</Link>{!product.id.startsWith("demo") ? <form action={deleteAction.bind(null, product.id)} style={{display:"inline",marginLeft:15}}><button className="danger">Delete</button></form> : null}</td>
         </tr>;
       })}</tbody>

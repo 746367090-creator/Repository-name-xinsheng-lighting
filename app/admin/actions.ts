@@ -81,12 +81,42 @@ for (let i = 1; i <= 4; i++) {
   }
 }
 
+if (slug === "factory") {
+  for (let i = 1; i <= 20; i++) {
+    const mediaId = String(form.get(`factory_media_id_${i}`) || "");
+    const title = String(form.get(`section_title_${i}`) || "").trim();
+    const caption = String(form.get(`section_body_${i}`) || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 1000);
+    const remove = form.get(`delete_factory_media_${i}`) === "on";
+    const file = form.get(`factory_section_media_${i}`);
+    if (remove && mediaId) {
+      const {error} = await s.from("site_media").delete().eq("id", mediaId).eq("collection", "factory");
+      if (error) throw error;
+      continue;
+    }
+    if (file instanceof File && file.size > 0) {
+      const uploadForm = new FormData();
+      uploadForm.append("media", file);
+      const uploaded = await uploadFiles(uploadForm);
+      const item = uploaded[0];
+      if (!item) throw new Error(`Unable to upload Factory section ${i} media.`);
+      const mediaPayload = {collection:"factory",title:title || `Factory section ${i}`,caption,media_type:item.type,media_url:item.url,sort_order:i-1,published:true};
+      const {error} = mediaId
+        ? await s.from("site_media").update(mediaPayload).eq("id", mediaId).eq("collection", "factory")
+        : await s.from("site_media").insert(mediaPayload);
+      if (error) throw error;
+    } else if (mediaId) {
+      const {error} = await s.from("site_media").update({title:title || `Factory section ${i}`,caption,sort_order:i-1}).eq("id", mediaId).eq("collection", "factory");
+      if (error) throw error;
+    }
+  }
+}
+
 let direct:MediaItem[]=[];try{const parsed=JSON.parse(String(form.get("uploaded_page_media")||"[]"));if(Array.isArray(parsed))direct=parsed.filter(item=>item&&(["image","video"] as string[]).includes(item.type)&&typeof item.url==="string")}catch{}const firstImageIndex=existing.findIndex(item=>item.type==="image");
 const keep=existing.filter((item,i)=>
   form.get(`delete_page_media_${i}`)!=="on" &&
   !(slug==="oem-odm" && heroUpload.length>0 && i===firstImageIndex)
 );
-const media=[...heroUpload,...keep,...fresh,...direct].slice(0,12);const payload={slug,title:String(form.get("title")||slug),eyebrow:String(form.get("eyebrow")||""),heading:String(form.get("heading")||""),body:String(form.get("body")||""),content:{...(slug === "home" ? homepageFields(form) : {}),
+const media=[...heroUpload,...keep,...fresh,...direct].slice(0,12);const payload={slug,title:String(form.get("title")||slug),eyebrow:String(form.get("eyebrow")||""),heading:String(form.get("heading")||""),body:String(form.get("body")||""),content:{page_seo_title:String(form.get("page_seo_title")||""),page_seo_description:String(form.get("page_seo_description")||""),page_seo_keywords:String(form.get("page_seo_keywords")||""),page_ai_summary:String(form.get("page_ai_summary")||""),...(slug === "faq" ? {faq_intro:String(form.get("body")||""),page_faqs:faqs(form.get("page_faqs"))} : {}),...(slug === "home" ? homepageFields(form) : {}),
 ...(slug === "applications" ? Object.fromEntries([1,2,3,4].flatMap(i=>[
 [`application_image_${i}`,String(applicationImages[`application_image_${i}`] || form.get(`application_image_${i}`)||"")],
 [`application_title_${i}`,String(form.get(`application_title_${i}`)||"")],
@@ -122,18 +152,18 @@ oem_faqs:faqs(form.get("oem_faqs")),
  title:String(form.get(`section_title_${i}`)||""),
  body:String(form.get(`section_body_${i}`)||"")
 }))
-.filter(section=>section.title || section.body)},media,published:form.get("published")==="on"};const{error}=await s.from("pages").upsert(payload);if(error)throw error;revalidatePath(`/${slug==="home"?"":slug}`);redirect(`/admin/content?page=${encodeURIComponent(slug)}`)}
+.filter(section=>section.title || section.body)},media,published:form.get("published")==="on"};const{error}=await s.from("pages").upsert(payload);if(error)throw error;revalidatePath(`/${slug==="home"?"":slug}`);if(slug==="factory")revalidatePath("/admin/media");redirect(`/admin/content?page=${encodeURIComponent(slug)}`)}
 export async function addGalleryItem(form:FormData){const s=requiredClient();const uploaded=await uploadFiles(form);const media=uploaded[0];if(!media)throw new Error("Choose an image or video.");const collection=String(form.get("collection"));const{error}=await s.from("site_media").insert({collection,title:String(form.get("title")),caption:String(form.get("caption")||""),media_type:media.type,media_url:media.url,link_url:String(form.get("link_url")||""),sort_order:Number(form.get("sort_order")||0),published:form.get("published")==="on"});if(error)throw error;revalidatePath("/");revalidatePath("/scenes");const returnTo=String(form.get("return_to")||"/admin/media");redirect(returnTo.startsWith("/admin/")?returnTo:"/admin/media")}
 export async function deleteGalleryItem(id:string){const s=requiredClient();await s.from("site_media").delete().eq("id",id);revalidatePath("/");revalidatePath("/scenes")}
 export async function uploadCatalog(form:FormData){const s=requiredClient();const file=form.get("catalog");if(!(file instanceof File)||file.size===0||file.type!=="application/pdf")throw new Error("Choose a PDF catalog.");const path=`catalog/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"-")}`;const{error:uploadError}=await s.storage.from("media").upload(path,file,{contentType:"application/pdf",upsert:false});if(uploadError)throw uploadError;const{data}=s.storage.from("media").getPublicUrl(path);await s.from("site_media").update({published:false}).eq("collection","catalog");const{error}=await s.from("site_media").insert({collection:"catalog",title:String(form.get("title")||file.name),caption:String(form.get("version")||""),media_type:"document",media_url:data.publicUrl,sort_order:0,published:true});if(error)throw error;revalidatePath("/");redirect("/admin/catalog")}
-export async function saveNews(form:FormData){const s=requiredClient();const uploaded=await uploadFiles(form,"cover");const title=String(form.get("title")||"");const payload={title,slug:String(form.get("slug")||slugify(title)),excerpt:String(form.get("excerpt")||""),content:String(form.get("content")||""),category:String(form.get("category")||"Company"),cover_url:uploaded[0]?.url||String(form.get("existing_cover")||""),published_at:String(form.get("published_at")||new Date().toISOString().slice(0,10)),status:String(form.get("status")||"draft")};const id=String(form.get("id")||"");const q=id?s.from("news").update(payload).eq("id",id):s.from("news").insert(payload);const{error}=await q;if(error)throw error;revalidatePath("/news");redirect("/admin/news")}
+export async function saveNews(form:FormData){const s=requiredClient();const uploaded=await uploadFiles(form,"cover");const title=String(form.get("title")||"");const payload={title,slug:String(form.get("slug")||slugify(title)),excerpt:String(form.get("excerpt")||""),content:String(form.get("content")||""),category:String(form.get("category")||"Company"),cover_url:uploaded[0]?.url||String(form.get("existing_cover")||""),seo:{title:String(form.get("seo_title")||""),description:String(form.get("seo_description")||""),keywords:String(form.get("seo_keywords")||"")},ai_summary:String(form.get("ai_summary")||""),published_at:String(form.get("published_at")||new Date().toISOString().slice(0,10)),status:String(form.get("status")||"draft")};const id=String(form.get("id")||"");const q=id?s.from("news").update(payload).eq("id",id):s.from("news").insert(payload);const{error}=await q;if(error)throw error;revalidatePath("/news");redirect("/admin/news")}
 export async function deleteNews(id:string){const s=requiredClient();await s.from("news").delete().eq("id",id);revalidatePath("/news")}
 export async function saveQuote(form:FormData){const s=requiredClient();const payload={quote_no:String(form.get("quote_no")),customer:String(form.get("customer")),product:String(form.get("product")),currency:String(form.get("currency")||"USD"),unit_price:Number(form.get("unit_price")||0),moq:Number(form.get("moq")||0),lead_time:String(form.get("lead_time")||""),packing_size:{product_size:String(form.get("product_size")||""),package_size:String(form.get("package_size")||""),net_weight:String(form.get("net_weight")||""),gross_weight:String(form.get("gross_weight")||""),qty_carton:String(form.get("qty_carton")||""),carton_size:String(form.get("carton_size")||""),carton_nw:String(form.get("carton_nw")||""),carton_gw:String(form.get("carton_gw")||""),cbm:String(form.get("cbm")||"")},notes:String(form.get("notes")||"")};const{error}=await s.from("quotes").insert(payload);if(error)throw error;redirect("/admin/quotes")}
 export async function deleteQuote(id:string){const s=requiredClient();const{error}=await s.from("quotes").delete().eq("id",id);if(error)throw error;revalidatePath("/admin/quotes")}
 export async function saveContentEntry(form:FormData){const s=requiredClient();const uploaded=await uploadFiles(form,"cover");const title=String(form.get("title")||"").trim();if(!title)throw new Error("Title is required.");const directCover=String(form.get("uploaded_cover_url")||"");if(directCover){const base=process.env.NEXT_PUBLIC_SUPABASE_URL;if(!base)throw new Error("Supabase is not configured.");const url=new URL(directCover),expected=new URL(base);if(url.origin!==expected.origin||!url.pathname.startsWith("/storage/v1/object/public/media/guides/"))throw new Error("Invalid uploaded cover URL.");}const entryId=String(form.get("id")||"");let previous:{slug:string;type:string;cover_url?:string}|null=null;if(entryId){const {data,error}=await s.from("content_entries").select("slug,type,cover_url").eq("id",entryId).single();if(error)throw error;previous=data;}const payload={type:String(form.get("type")||"article"),slug:String(form.get("slug")||slugify(title)),title,excerpt:String(form.get("excerpt")||""),content:String(form.get("content")||""),category:String(form.get("category")||""),cover_url:form.get("remove_cover")==="on"?"":(directCover||uploaded[0]?.url||previous?.cover_url||""),faqs:faqs(form.get("faqs")),related_products:lines(form.get("related_products")),seo:{title:String(form.get("seo_title")||""),description:String(form.get("seo_description")||""),keywords:String(form.get("seo_keywords")||"")},ai_summary:String(form.get("ai_summary")||""),status:String(form.get("status")||"draft"),published_at:String(form.get("published_at")||new Date().toISOString().slice(0,10))};const id=String(form.get("id")||"");const{error}=await(id?s.from("content_entries").update(payload).eq("id",id):s.from("content_entries").insert(payload));if(error)throw error;revalidatePath("/");revalidatePath("/solutions");revalidatePath("/resources");revalidatePath("/faq");revalidatePath("/applications");revalidatePath("/admin/guides");revalidatePath(`/resources/${payload.slug}`);revalidatePath(`/solutions/${payload.slug}`);if(previous?.slug){revalidatePath(`/resources/${previous.slug}`);revalidatePath(`/solutions/${previous.slug}`);}revalidatePath(`/applications/cases/${payload.slug}`);if(previous?.slug)revalidatePath(`/applications/cases/${previous.slug}`);revalidatePath("/admin/applications");const returnTo=String(form.get("return_to")||"");redirect(["/admin/guides","/admin/applications?category=case","/admin/applications?category=guides"].includes(returnTo)?returnTo:"/admin/library")}
 export async function deleteContentEntry(id:string){const s=requiredClient();await s.from("content_entries").delete().eq("id",id);revalidatePath("/");revalidatePath("/solutions");revalidatePath("/resources");revalidatePath("/faq")}
 export async function saveSetting(key:string,form:FormData){const s=requiredClient();const value:Record<string,string>={};for(const[name,val]of form.entries())if(typeof val==="string")value[name]=val;const{error}=await s.from("site_settings").upsert({key,value});if(error)throw error;revalidatePath("/");redirect("/admin/seo")}
-export async function updateInquiryStatus(id:string,form:FormData){const status=String(form.get("status")||"new");const allowed=["new","contacted","quotation","sample","negotiation","won","lost","spam"];if(!allowed.includes(status))throw new Error("Invalid inquiry status.");const s=requiredClient();const{error}=await s.from("inquiries").update({status}).eq("id",id);if(error)throw error;revalidatePath("/admin/inquiries")}
+export async function updateInquiryStatus(id:string,form:FormData){const status=String(form.get("status")||"new");const allowed=["new","contacted","quotation","sample","negotiation","won","lost","spam"];if(!allowed.includes(status))throw new Error("Invalid inquiry status.");const s=requiredClient();const{error}=await s.from("inquiries").update({status,spam_marked_at:status==="spam"?new Date().toISOString():null}).eq("id",id);if(error)throw error;revalidatePath("/admin/inquiries")}
 
 export async function saveApplicationScene(form:FormData){
  const client=requiredClient();const {data:auth,error:authError}=await client.auth.getUser();if(authError||!auth.user)throw new Error("Please sign in again.");

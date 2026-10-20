@@ -36,3 +36,12 @@
 @media(max-width:900px){.admin-sidebar{height:auto;position:relative}.admin-sidebar nav{display:flex;flex-direction:column}.admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-actions{gap:16px;flex-wrap:wrap}}
 @media(max-width:540px){.admin-shortcuts,.admin-media-grid{grid-template-columns:1fr}.admin-content{padding:20px 15px}}
 .homepage-product-toggle{min-height:40px;border:1px solid #ded3c6;background:#fff;border-radius:7px;padding:8px 12px;cursor:pointer;white-space:nowrap}.homepage-product-toggle[aria-pressed=true]{background:#fff3e8;border-color:#ed7117;color:#b9520b}.homepage-product-toggle:disabled{opacity:.6;cursor:wait}
+
+/* XINSHERN CMS V4: consistent thumbnails, SEO status and combined Factory editing */
+.admin-list-thumb{display:block;width:96px;height:68px;object-fit:cover;border-radius:7px;background:#eee6dc}
+.admin-form-cover-preview{display:block;width:240px;max-width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;border:1px solid #e8e0d6}
+.status-ok{color:#247a42;font-weight:800;white-space:nowrap}.status-missing{color:#b05a18;font-weight:800;white-space:nowrap}
+.admin-overview{margin:0 0 24px;background:#fff;border:1px solid #e8e0d6;border-radius:12px;overflow:hidden}.admin-overview>summary{cursor:pointer;padding:16px 20px;font-weight:850;color:#473b30}.admin-overview .admin-table{border-radius:0}
+.factory-section-editor{display:grid;grid-template-columns:minmax(220px,320px) 1fr;gap:22px;padding:20px;border:1px solid #e8e0d6;border-radius:12px;background:#fffaf5}.factory-section-media img,.factory-section-media video,.admin-thumb-placeholder{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:#eee6dc}.admin-thumb-placeholder{display:grid;place-items:center;color:#8f8375}.factory-section-media,.factory-section-copy{display:grid;gap:12px;align-content:start}
+@media(max-width:760px){.factory-section-editor{grid-template-columns:1fr}.admin-list-thumb{width:72px;height:54px}}
+.faq-rows-editor{min-height:320px!important;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.65}
