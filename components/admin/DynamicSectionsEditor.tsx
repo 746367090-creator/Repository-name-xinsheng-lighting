@@ -21,6 +21,7 @@ export default function DynamicSectionsEditor({
   const [sections,setSections]=useState<Section[]>(
     (initial.length ? initial : [{title:"",body:""}]).map((item,index)=>({...item,media:media[index]}))
   );
+  const [deletedMediaIds,setDeletedMediaIds]=useState<string[]>([]);
 
   function update(index:number,key:keyof Section,value:string){
     setSections(items =>
@@ -38,6 +39,8 @@ export default function DynamicSectionsEditor({
   }
 
   function remove(index:number){
+    const mediaId=sections[index]?.media?.id;
+    if(mediaId)setDeletedMediaIds(ids=>ids.includes(mediaId)?ids:[...ids,mediaId]);
     setSections(
       sections.filter((_,i)=>i!==index)
     );
@@ -45,6 +48,7 @@ export default function DynamicSectionsEditor({
 
   return (
     <div>
+      {deletedMediaIds.map(id=><input type="hidden" name="deleted_factory_media_ids" value={id} key={id}/>)}
       {sections.map((section,index)=>(
         <div className="factory-section-editor" key={section.media?.id || index}>
           <div className="factory-section-media">

@@ -4,6 +4,7 @@ import ContentGrid from "@/components/ContentGrid";
 import SmartVideo from "@/components/SmartVideo";
 import SectionHead from "@/components/SectionHead";
 import ProjectCTA from "@/components/ProjectCTA";
+import sanitizeHtml from "sanitize-html";
 
 export const metadata = {
   title:"Lighting Applications & OEM/ODM Solutions",
@@ -38,6 +39,11 @@ export default async function Applications({
     ? guideEntries
     : [];
 
+  const applicationSummary = sanitizeHtml(page?.body || "Helping global brands, importers and retailers develop reliable LED lighting products through OEM/ODM manufacturing, customization and quality-controlled production.", {
+    allowedTags: [],
+    allowedAttributes: {}
+  }).replace(/\s+/g, " ").trim();
+
 
   return (
     <>
@@ -53,7 +59,7 @@ export default async function Applications({
           <SectionHead
             kicker={page?.eyebrow || "Applications & OEM/ODM Solutions"}
             title={page?.heading || "Lighting Applications & Solutions"}
-            description={page?.body || "Helping global brands, importers and retailers develop reliable LED lighting products through OEM/ODM manufacturing, customization and quality-controlled production."}
+            description={applicationSummary}
           />
         </div>
 

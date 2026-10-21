@@ -875,8 +875,21 @@
 
 /* Keep the CMS-managed Applications introduction compact on the landing page. */
 .application-page-head .section-description-rich {
+  display: -webkit-box;
   max-height: 8.75em;
   overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+}
+
+.application-page-head .section-head h2 {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(34px, 5vw, 64px);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
 }
 
 .application-capabilities.section {

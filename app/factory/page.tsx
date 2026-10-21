@@ -54,7 +54,7 @@ export default async function FactoryPage() {
     </div></section>
     <div className="section-divider"/>
     <section className="section"><div className="container">{blocks.map((block, index) => <div className="split" key={String(block[0])} style={{marginBottom:80}}><div className={index % 2 ? "copy order-last" : "copy"}><div className="kicker">0{index + 1}</div><h2>{block[0]}</h2><RichContent html={String(block[1])} className="factory-rich-content"/></div><div className="media-panel factory-square">{gallery[index] ? (gallery[index].media_type === "video" ? <video src={gallery[index].media_url} controls/> : <img src={gallery[index].media_url} alt={gallery[index].title}/>) : <div className="light-orb"/>}</div></div>)}</div></section>
-    <section className="section section-divider"><div className="container"><SectionHead title="Factory" accent="Gallery"/><GalleryCarousel items={gallery}/></div></section>
+    {gallery.length > 0 && <section className="section section-divider"><div className="container"><SectionHead title="Factory Gallery"/><GalleryCarousel items={gallery} mediaOnly/></div></section>}
     <ProjectCTA/>
   </>;
 }

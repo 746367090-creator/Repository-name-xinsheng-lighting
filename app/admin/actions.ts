@@ -82,6 +82,11 @@ for (let i = 1; i <= 4; i++) {
 }
 
 if (slug === "factory") {
+  const deletedMediaIds = form.getAll("deleted_factory_media_ids").map(value=>String(value)).filter(Boolean);
+  if (deletedMediaIds.length) {
+    const {error} = await s.from("site_media").delete().eq("collection", "factory").in("id", deletedMediaIds);
+    if (error) throw error;
+  }
   for (let i = 1; i <= 20; i++) {
     const mediaId = String(form.get(`factory_media_id_${i}`) || "");
     const title = String(form.get(`section_title_${i}`) || "").trim();
