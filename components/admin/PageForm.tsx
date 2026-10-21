@@ -136,9 +136,6 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
       <p className="hint">上传后点击页面底部 Save。新图片将替换顶部主图，其他板块图片保持不变。</p>
       <p className="hint">图片顺序：第一张为顶部大图；第二至第七张对应下方六个板块。上传后保存生效。推荐使用真实产品开发或工厂照片。</p>
       <label>Capability tags / 能力标签（英文逗号分隔）<input name="oem_tags" defaultValue={String(content.oem_tags || "Custom Product Development,Private Label,Custom Packaging,Quality Control")}/></label>
-      <label>Project title / 咨询标题<input name="oem_project_title" defaultValue={String(content.oem_project_title || "Start Your OEM Project")}/></label>
-      <label>Project description / 咨询介绍<textarea name="oem_project_body" defaultValue={String(content.oem_project_body || "Tell us what you want to develop, your target market and estimated order quantity. Our team will review your requirements and discuss the next steps.")}/></label>
-      <label>Button label / 按钮文字<input name="oem_button_label" defaultValue={String(content.oem_button_label || "Request an OEM Quote")}/></label>
       <h3>OEM / ODM Workflow Cards / 流程卡片编辑</h3>
       <p className="hint">分别编辑四套流程的标题和每一步文字。前台使用网页原生文字展示，不需要上传流程图图片。</p>
       {[

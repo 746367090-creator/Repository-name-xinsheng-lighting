@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Suspense } from "react";
 import { getPage, getGallery } from "@/lib/queries";
 import RichContent from "@/components/RichContent";
@@ -34,7 +33,6 @@ export default async function OEM() {
     {hero ? <img src={hero} alt={images[0]?.alt || "XINSHERN lighting development and manufacturing"} className="oem-hero-image"/> : <div className="oem-image-placeholder">Product development · Manufacturing · Customization</div>}
     <div className="kicker">{page?.eyebrow || "OEM & ODM Services"}</div><h1>{heading}</h1><p className="oem-intro">{page?.body || "From concept to mass production, XINSHERN helps brands, importers and retailers develop customized lighting products with tailored designs, packaging and manufacturing support."}</p>
     <div className="tags oem-tags">{tags.map(tag=><span className="tag" key={tag}>{tag}</span>)}</div>
-    <div className="oem-project-panel"><h2>{String(content.oem_project_title || "Start Your OEM Project")}</h2><p>{String(content.oem_project_body || "Tell us what you want to develop, your target market and estimated order quantity. Our team will review your requirements and discuss the next steps.")}</p><div className="hero-actions"><Link href="/contact?type=OEM%20%2F%20ODM%20Request" className="btn-primary">{String(content.oem_button_label || "Request an OEM Quote")}</Link><a href="#oem-inquiry" className="btn-secondary">Discuss Your Project</a></div></div>
     <div className="oem-workflows-placement">
       <OEMWorkflow content={content as Record<string, unknown>}/>
     </div>

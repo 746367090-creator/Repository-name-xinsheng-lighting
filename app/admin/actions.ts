@@ -128,9 +128,6 @@ const media=[...heroUpload,...keep,...fresh,...direct].slice(0,12);const payload
 [`application_body_${i}`,String(form.get(`application_body_${i}`)||"")]
 ])) : {}),...(slug === "oem-odm" ? {
 oem_tags:String(form.get("oem_tags")||""),
-oem_project_title:String(form.get("oem_project_title")||""),
-oem_project_body:String(form.get("oem_project_body")||""),
-oem_button_label:String(form.get("oem_button_label")||""),
 oem_faqs:faqs(form.get("oem_faqs")),
 ...Object.fromEntries([
   ["workflow_existing_oem", 10],
