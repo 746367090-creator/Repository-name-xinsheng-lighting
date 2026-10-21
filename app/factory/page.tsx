@@ -47,7 +47,7 @@ export default async function FactoryPage() {
 
   return <>
     <section className="section"><div className="container">
-      <SectionHead kicker={page?.eyebrow} title={(page?.heading || "Inside Our Factory").replace(/ Factory$/, " ")} accent="Factory" description={page?.body}/>
+      <SectionHead kicker={page?.eyebrow} title={page?.heading || "Inside Our Factory"} description={page?.body}/>
       {externalVideo ? <div className="media-panel">
         {embedVideo ? <iframe src={embedVideo} title="Xinshern factory video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen style={{width:"100%",height:"100%",border:0}}/> : <video src={externalVideo} controls playsInline/>}
       </div> : uploadedMedia ? <div className="media-panel">{uploadedMedia.type === "video" ? <video src={uploadedMedia.url} controls playsInline/> : <img src={uploadedMedia.url} alt="Xinshern factory"/>}</div> : null}

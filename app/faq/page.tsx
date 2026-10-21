@@ -18,5 +18,5 @@ export default async function FAQ(){
   const[page,custom]=await Promise.all([getPage("faq"),getContentEntries("faq")]);
   const legacy=pageFAQs(page?.content,page?.body);
   const groups=custom.length?custom.map(x=>({title:x.title,items:x.faqs?.length?x.faqs:[{question:x.title,answer:x.content}]})):legacy.length?[{title:"Purchasing FAQ",items:legacy}]:defaults;
-  return <section className="section"><div className="container"><SectionHead kicker={page?.eyebrow||"Help Center"} title={(page?.heading||"Frequently Asked Questions").replace(/ Questions$/," ")} accent="Questions" description={String(page?.content?.faq_intro||"Answers to common questions about products, customization, samples, quality and delivery.")}/>{groups.map(g=><section key={g.title} style={{marginTop:55}}><h2>{g.title}</h2><FAQAccordion items={g.items||[]}/></section>)}</div></section>;
+  return <section className="section"><div className="container"><SectionHead kicker={page?.eyebrow||"Help Center"} title={page?.heading||"Frequently Asked Questions"} description={String(page?.content?.faq_intro||"Answers to common questions about products, customization, samples, quality and delivery.")}/>{groups.map(g=><section key={g.title} style={{marginTop:55}}><h2>{g.title}</h2><FAQAccordion items={g.items||[]}/></section>)}</div></section>;
 }

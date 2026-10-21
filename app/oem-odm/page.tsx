@@ -27,7 +27,7 @@ export default async function OEM() {
   const images = (page?.media || []).filter(item=>item.type==="image");
   const fallback = factory.find(item=>item.media_type==="image");
   const hero = images[0]?.url || fallback?.media_url;
-  const heading = !page?.heading || page.heading === "Lighting products shaped around your brand" ? "OEM & ODM Lighting Manufacturer for Global Brands" : page.heading;
+  const heading = page?.heading || "OEM & ODM Lighting Manufacturer for Global Brands";
   const tags = String(content.oem_tags || "Custom Product Development,Private Label,Custom Packaging,Quality Control").split(",").map(s=>s.trim()).filter(Boolean);
   const faqs = Array.isArray(content.oem_faqs) && content.oem_faqs.length ? content.oem_faqs as QA[] : defaultFAQs;
   return <><section className="section"><div className="container oem-editorial">

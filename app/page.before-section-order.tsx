@@ -1,0 +1,79 @@
+import Link from "next/link";
+import { Suspense } from "react";
+import { Cog, Factory, ClipboardCheck, PackageCheck } from "lucide-react";
+import { getGallery, getPage, getHomepageProducts, getContentEntries } from "@/lib/queries";
+import { homeSteps, homeBuyers, homeFAQs, homeTextDefaults, homepageLink } from "@/lib/homepage";
+import SectionHead from "@/components/SectionHead";
+import HeroCarousel from "@/components/HeroCarousel";
+import ContentGrid from "@/components/ContentGrid";
+import FAQAccordion from "@/components/FAQAccordion";
+import ContactForm from "@/components/ContactForm";
+import CustomerCarousel from "@/components/CustomerCarousel";
+import ProductCarousel from "@/components/ProductCarousel";
+import type { QA } from "@/lib/types";
+export const revalidate = 60;
+const capabilities = [
+  [Cog,"Product development","Discuss the design brief, sample requirements and specifications for your product."],
+  [Factory,"Manufacturing process","Review the equipment and production steps relevant to your order."],
+  [ClipboardCheck,"Inspection requirements","Agree inspection checkpoints and request the applicable test records."],
+  [PackageCheck,"Packaging & delivery","Confirm packaging, labeling and shipment requirements for your market."],
+] as const;
+export default async function Home() {
+  const [page, hero, products, factory, cases, customers] = await Promise.all([
+    getPage("home"),
+    getGallery("hero"),
+    getHomepageProducts(),
+    getGallery("factory"),
+    getContentEntries("case"),
+    getGallery("customer"),
+  ]);
+  const content=page?.content || {};
+  const text=(key:string)=>{const value=String(content[key] || homeTextDefaults[key] || "");return key==="home_products_body"&&value==="Choose a product series to view the range and discuss your requirements."?homeTextDefaults.home_products_body:value;};
+  const heading="Custom LED Lighting Solutions for Global Brands";
+  const eyebrow="DECORATIVE LED LIGHTING MANUFACTURER SINCE 2011";
+  const approvedSlugs=String(content.home_case_slugs || "").split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
+  const selectedCases=content.home_cases_authorized===true ? Array.from(new Set(approvedSlugs)).map(slug=>cases.find(item=>item.slug===slug)).filter((item):item is typeof cases[number]=>!!item).slice(0,3) : [];
+  const stats=content.home_stats_verified===true ? [1,2,3,4].filter(i=>content[`stat_value_${i}`]&&content[`stat_label_${i}`]) : [];
+  const photos=content.home_photos_verified===true ? (page?.media?.length ? page.media.map((item,i)=>({url:item.url,type:item.type,title:String(content[`home_factory_title_${i+1}`]||item.alt||""),body:String(content[`home_factory_body_${i+1}`]||"")})) : factory.filter(item=>item.media_type!=="document").map((item,i)=>({url:item.media_url,type:item.media_type,title:String(content[`home_factory_title_${i+1}`]||item.title),body:String(content[`home_factory_body_${i+1}`]||item.caption||"" )}))).slice(0,4) : [];
+  const faqs=Array.isArray(content.home_faqs)&&content.home_faqs.length ? content.home_faqs as QA[] : homeFAQs;
+  return <>
+    <HeroCarousel items={hero} eyebrow={eyebrow||"Your Lighting Manufacturing Partner"} heading={heading||"Lighting Products Built for Your Brand"} body={page?.body||"Discuss lighting products, development and customization for your brand or market."} ctaLabel={String(content.cta_label||"Submit Project Requirements")} ctaUrl={homepageLink(content.cta_url)||"/#project-inquiry"} catalogLabel="Explore Products" catalogUrl="/products"/>
+    <section className="section" id="product-series"><div className="container"><SectionHead kicker="Selected products" title={text("home_products_title")} description={text("home_products_body")}/><ProductCarousel items={products}/><div className="home-section-actions"><Link href="/products" className="text-link">View all products →</Link></div></div></section>
+    <section className="section architecture-soft" id="why-xinshern"><div className="container"><SectionHead kicker="Why choose XINSHERN" title={String(content.why_title||"Review the capabilities")} accent={String(content.why_accent||"behind your product")} description={String(content.why_description||"Discuss the manufacturing process and supporting evidence relevant to your project.")}/><div className="feature-grid">{capabilities.map(([Icon,title,body],i)=>{const evidence=homepageLink(content[`why_evidence_${i+1}`]);return <article className="card feature-card" key={title}>{content[`why_image_${i+1}`] ? (
+<img
+className="feature-image"
+src={String(content[`why_image_${i+1}`])}
+alt={title}
+/>
+) : (
+<div className="feature-icon">
+<Icon aria-hidden="true"/>
+</div>
+)}<h3>{String(content[`why_card_title_${i+1}`]||title)}</h3><div
+className="feature-card-content"
+dangerouslySetInnerHTML={{
+__html:String(content[`why_card_body_${i+1}`]||body)
+}}
+/>{evidence&&<a href={evidence} className="text-link">{String(content[`why_evidence_label_${i+1}`]||"View supporting information")} →</a>}</article>})}</div>{stats.length>0&&<div className="stats">{stats.map(i=><div className="stat" key={i}><strong>{String(content[`stat_value_${i}`])}</strong><span>{String(content[`stat_label_${i}`])}</span></div>)}</div>}
+    </div></section>
+
+    <section className="section architecture-dark" id="development-process"><div className="container"><SectionHead kicker="OEM / ODM development" title={text("home_process_title")} description={text("home_process_body")}/><ol className="process-grid home-process-grid">{homeSteps.map(([title,body],i)=><li key={title}><span>0{i+1}</span><h3>{String(content[`home_step_title_${i+1}`]||title)}</h3><p>{String(content[`home_step_body_${i+1}`]||body)}</p></li>)}</ol><div className="home-section-actions"><Link href="/oem-odm" className="btn-primary">Explore OEM / ODM</Link></div></div></section>
+    <section className="section" id="factory-quality"><div className="container"><SectionHead kicker="Factory & quality" title={text("home_factory_title")} description={text("home_factory_body")}/>{photos.length>0&&<div className="home-factory-grid">{photos.map((item,i)=><figure className="card home-factory-card" key={`${item.url}-${i}`}>{item.type==="video"?<video src={item.url} controls playsInline preload="metadata"/>:<img src={item.url} alt={item.title||"XINSHERN manufacturing"} loading="lazy"/>}<figcaption>{item.title&&<h3>{item.title}</h3>}{item.body&&<p>{item.body}</p>}</figcaption></figure>)}</div>}<div className="home-section-actions"><Link href="/factory" className="btn-secondary">Explore Factory & Quality</Link><Link href="/contact?application=Inspection%20and%20test%20records" className="text-link">Discuss inspection records →</Link></div></div></section>
+
+    <section className="section architecture-soft" id="customer-trust">
+      <div className="container">
+        <SectionHead
+          kicker="Customer Trust"
+          title="Trusted Cooperation With Global Buyers"
+          description="Customers and partners visiting XINSHERN for lighting projects and manufacturing cooperation."
+        />
+        <CustomerCarousel items={customers}/>
+      </div>
+    </section>
+
+    <section className="section architecture-soft" id="project-cases"><div className="container"><SectionHead kicker="Project cases" title={text("home_cases_title")} description={selectedCases.length?text("home_cases_body"):"Tell us your development requirements and discuss the project information available for your product."}/>{selectedCases.length>0&&<ContentGrid items={selectedCases} base="/applications/cases"/>}<div className="home-section-actions"><Link href="/applications?category=case" className="text-link">Explore project cases →</Link><Link href="/contact?type=OEM%20%2F%20ODM%20Request" className="text-link">Discuss your development brief →</Link></div></div></section>
+    <section className="section" id="buyer-services"><div className="container"><SectionHead kicker="For different buyers" title={text("home_buyers_title")} description={text("home_buyers_body")}/><div className="feature-grid">{homeBuyers.map(([title,body],i)=><Link href={`/contact?application=${encodeURIComponent(title)}&type=OEM%20%2F%20ODM%20Request`} className="card home-buyer-card" key={title}><h3>{String(content[`home_buyer_title_${i+1}`]||title)}</h3><p>{String(content[`home_buyer_body_${i+1}`]||body)}</p><span className="text-link">Discuss your requirements →</span></Link>)}</div></div></section>
+    <section className="section architecture-soft" id="buyer-faq"><div className="container home-faq"><SectionHead kicker="Buyer FAQ" title={text("home_faq_title")} description={text("home_faq_body")}/><FAQAccordion items={faqs}/></div></section>
+    <section className="section contact-band" id="project-inquiry"><div className="container"><div className="home-inquiry-grid"><div><SectionHead kicker="Start your project" title={text("home_inquiry_title")} description={text("home_inquiry_body")}/><Link href="/contact?application=Project%20discussion%20appointment&type=OEM%20%2F%20ODM%20Request" className="btn-secondary">{text("home_appointment_label")}</Link><p className="home-appointment-note">Include your preferred time and time zone in your request.</p></div><Suspense fallback={<Link href="/contact" className="btn-primary">Submit your requirements</Link>}><ContactForm defaultInquiryType="OEM / ODM Request" heading={text("home_form_title")}/></Suspense></div></div></section>
+  </>;
+}
