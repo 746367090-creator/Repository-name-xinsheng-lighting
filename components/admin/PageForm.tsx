@@ -30,16 +30,7 @@ export default function PageForm({ page, factoryGallery = [], action }: { page: 
             label="Main Description / 主描述"
             defaultValue={page.body || ""}
           />
-        : <div className="main-description-field">
-      {["applications", "resources"].includes(page.slug)
-        ? <RichTextEditor
-            name="body"
-            label="Main Description / 主描述"
-            defaultValue={page.body || ""}
-          />
         : <label>{page.slug==="faq"?"FAQ Introduction / FAQ 简介":"Main Description"}<textarea name="body" defaultValue={page.slug==="faq"?String(content.faq_intro||""):page.body}/></label>
-      }
-    </div>
       }
     </div>
 
@@ -148,10 +139,6 @@ defaultValue={String(content[`home_factory_body_${i+1}`] || body)}
       <label>Project title / 咨询标题<input name="oem_project_title" defaultValue={String(content.oem_project_title || "Start Your OEM Project")}/></label>
       <label>Project description / 咨询介绍<textarea name="oem_project_body" defaultValue={String(content.oem_project_body || "Tell us what you want to develop, your target market and estimated order quantity. Our team will review your requirements and discuss the next steps.")}/></label>
       <label>Button label / 按钮文字<input name="oem_button_label" defaultValue={String(content.oem_button_label || "Request an OEM Quote")}/></label>
-      {["Product Development","Customization Options","Manufacturing Capabilities","Quality Assurance","OEM Project Workflow","MOQ & Lead Time"].map((title,i)=><div className="admin-form-grid" key={title}>
-        <label>Section {i+1} title / 标题<input name={`section_title_${i+1}`} defaultValue={sections[i]?.title || title}/></label>
-        <RichTextEditor name={`section_body_${i+1}`} label={`Section ${i+1} description / 正文`} defaultValue={String(sections[i]?.body || (i === 4 ? "01 — Customer Inquiry & Requirements\n02 — Product Matching & Feasibility Review\n03 — Quotation & Order Confirmation\n04 — Sample Development\n05 — Customer Sample Approval\n06 — Material Preparation & Incoming QC\n07 — Mass Production & Process Inspection\n08 — Functional Testing & Aging\n09 — Final Inspection & Packaging\n10 — Shipment & Delivery" : ""))}/>
-      </div>)}
       <h3>OEM / ODM Workflow Cards / 流程卡片编辑</h3>
       <p className="hint">分别编辑四套流程的标题和每一步文字。前台使用网页原生文字展示，不需要上传流程图图片。</p>
       {[

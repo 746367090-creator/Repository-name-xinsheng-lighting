@@ -49,15 +49,13 @@ export default async function Applications({
         
 
 
-        <SectionHead
-          kicker="Applications & OEM/ODM Solutions"
-          title={
-            category==="case"
-            ?"Decorative LED Lighting Applications & Custom Solutions"
-            :"Lighting Applications & Solutions"
-          }
-          description="Helping global brands, importers and retailers develop reliable LED lighting products through OEM/ODM manufacturing, customization and quality-controlled production."
-        />
+        <div className="application-page-head">
+          <SectionHead
+            kicker={page?.eyebrow || "Applications & OEM/ODM Solutions"}
+            title={page?.heading || "Lighting Applications & Solutions"}
+            description={page?.body || "Helping global brands, importers and retailers develop reliable LED lighting products through OEM/ODM manufacturing, customization and quality-controlled production."}
+          />
+        </div>
 
 
         
@@ -77,40 +75,28 @@ export default async function Applications({
 <div className="capability-card">
 
 <h3>{String((page?.content as any)?.application_title_1 || "OEM / ODM Development")}</h3>
-<p>
-From concept development to mass production,
-we support customized lighting projects.
-</p>
+<p>{String((page?.content as any)?.application_body_1 || "From concept development to mass production, we support customized lighting projects.")}</p>
 </div>
 
 
 <div className="capability-card">
 
 <h3>{String((page?.content as any)?.application_title_2 || "Custom Lighting Solutions")}</h3>
-<p>
-Product design, packaging and private label
-solutions for global brands.
-</p>
+<p>{String((page?.content as any)?.application_body_2 || "Product design, packaging and private label solutions for global brands.")}</p>
 </div>
 
 
 <div className="capability-card">
 
 <h3>{String((page?.content as any)?.application_title_3 || "Quality Control")}</h3>
-<p>
-Inspection and production management
-throughout the manufacturing process.
-</p>
+<p>{String((page?.content as any)?.application_body_3 || "Inspection and production management throughout the manufacturing process.")}</p>
 </div>
 
 
 <div className="capability-card">
 
 <h3>{String((page?.content as any)?.application_title_4 || "Global Supply Support")}</h3>
-<p>
-Reliable export support for distributors,
-retailers and international buyers.
-</p>
+<p>{String((page?.content as any)?.application_body_4 || "Reliable export support for distributors, retailers and international buyers.")}</p>
 </div>
 
 
@@ -188,7 +174,7 @@ items={guideEntries.slice(0,3)}
 base="/solutions"
 />
 <Link className="application-view-all" href="/applications?category=guides">
-View All Guides →
+View All Solutions →
 </Link>
 </section>
 

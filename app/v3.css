@@ -873,6 +873,12 @@
   padding-bottom: 18px !important;
 }
 
+/* Keep the CMS-managed Applications introduction compact on the landing page. */
+.application-page-head .section-description-rich {
+  max-height: 8.75em;
+  overflow: hidden;
+}
+
 .application-capabilities.section {
   padding-top: 12px !important;
   padding-bottom: 22px !important;
