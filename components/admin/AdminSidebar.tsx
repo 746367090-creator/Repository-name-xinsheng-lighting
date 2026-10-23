@@ -7,7 +7,7 @@ const groups=[
  {title:"网站内容",links:[["/admin/content","网站页面 / Pages"],["/admin/about","公司介绍 / About Us"],["/admin/applications","案例与 Solutions"],["/admin/guides","采购指南"],["/admin/news","新闻资讯"],["/admin/library","知识与 FAQ"]]},
  {title:"资料与素材",links:[["/admin/media","图片与视频"],["/admin/catalog","产品目录 PDF"],["/admin/customers","客户照片与Logo"]]},
  {title:"客户业务",links:[["/admin/inquiries","询盘管理"],["/admin/searches","搜索记录"],["/admin/quotes","报价管理"]]},
- {title:"系统设置",links:[["/admin/seo","SEO与公司资料"]]},
+ {title:"系统设置",links:[["/admin/seo","SEO与公司资料"],["/admin/indexing","搜索引擎收录"]]},
 ];
 export default function AdminSidebar(){
  const path=usePathname(),router=useRouter();
