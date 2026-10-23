@@ -132,3 +132,16 @@ drop policy if exists "admin content entries" on public.content_entries;create p
 drop policy if exists "public read settings" on public.site_settings;create policy "public read settings" on public.site_settings for select using(true);
 drop policy if exists "admin settings" on public.site_settings;create policy "admin settings" on public.site_settings for all to authenticated using(true) with check(true);
 create index if not exists products_model_idx on public.products(model);create index if not exists content_entries_type_idx on public.content_entries(type,status,published_at desc);
+
+create table if not exists public.search_queries(
+  id uuid primary key default gen_random_uuid(),
+  query text not null,
+  result_count integer,
+  created_at timestamptz not null default now()
+);
+alter table public.search_queries enable row level security;
+drop policy if exists "public create search query" on public.search_queries;
+create policy "public create search query" on public.search_queries for insert to anon, authenticated with check(char_length(query) between 2 and 120);
+drop policy if exists "admin search queries" on public.search_queries;
+create policy "admin search queries" on public.search_queries for select to authenticated using(true);
+create index if not exists search_queries_created_idx on public.search_queries(created_at desc);

@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
-const links = [["/", "Home"], ["/oem-odm", "OEM / ODM"], ["/factory", "Factory"], ["/applications", "Applications"], ["/about", "About Us"], ["/resources", "Resources"]];
+const links = [["/", "Home"], ["/oem-odm", "OEM / ODM"], ["/factory", "Factory"], ["/applications", "Applications"], ["/search", "Product Search"], ["/about", "About Us"], ["/resources", "Resources"]];
 export default function Header({ categories }: { categories: string[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
